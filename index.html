@@ -1,145 +1,122 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>商家网站｜高级品牌官网生成器</title>
-  <meta name="description" content="创建、预览并发布你的商家网站。" />
-  <meta name="theme-color" content="#08111f" />
-  <meta name="application-version" content="1.0.0" />
-  <meta name="robots" content="index,follow" />
-  <link rel="canonical" href="https://shangjiawangzhan.com/" />
-  <link rel="stylesheet" href="styles.css?v=1.0.0" />
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>商家网站｜创建你的品牌官网</title>
+  <meta name="description" content="选择设计，生成并分享你的商家网站。">
+  <meta name="theme-color" content="#07111d">
+  <meta name="application-version" content="1.0.0">
+  <link rel="canonical" href="https://shangjiawangzhan.com/">
+  <link rel="preconnect" href="https://images.unsplash.com">
+  <link rel="stylesheet" href="styles.css?v=1.0.0">
 </head>
 <body>
-  <header class="topbar">
-    <a class="brand" href="#top" aria-label="商家网站首页">
-      <span class="brand-mark">商</span>
-      <span><strong>商家网站</strong><small>SHANGJIA WANGZHAN</small></span>
-    </a>
-    <nav><a href="#builder">创建网站</a></nav>
-    <a class="top-cta" href="#builder">创建网站</a>
-  </header>
+<header class="topbar">
+  <a class="brand" href="#top" aria-label="商家网站首页">
+    <span class="brand-mark">商</span>
+    <span><strong>商家网站</strong><small>SHANGJIA WANGZHAN</small></span>
+  </a>
+  <div class="top-actions">
+    <button id="manage-billing" class="text-button" type="button">会员管理</button>
+    <a class="top-cta" href="#templates">开始创建</a>
+  </div>
+</header>
 
-  <main id="top">
-    <section class="hero">
-      <div class="hero-glow"></div>
-      <div class="hero-copy">
-        <div class="pill">BUSINESS WEBSITE BUILDER</div>
-        <h1>创建一个真正属于<br><span>你的品牌网站</span></h1>
-        <p>输入商家资料，立即生成高级官网。</p>
-        <div class="hero-actions">
-          <a class="btn primary" href="#builder">开始创建</a>
-          <button class="btn ghost" id="load-demo" type="button">查看示例</button>
-        </div>
-        <div class="address-ladder single-address">
-          <div><b>独立网站</b><code>yourbrand.com</code></div>
-        </div>
+<main id="top">
+  <section class="hero">
+    <div class="hero-copy">
+      <span class="eyebrow">BUSINESS WEBSITE STUDIO</span>
+      <h1>选择设计<br><em>生成你的商家网站</em></h1>
+      <a class="primary-button" href="#templates">选择设计</a>
+    </div>
+    <div class="hero-showcase" aria-hidden="true">
+      <div class="showcase-card showcase-a"></div>
+      <div class="showcase-card showcase-b"></div>
+      <div class="showcase-card showcase-c"></div>
+    </div>
+  </section>
+
+  <section id="templates" class="template-section section-shell">
+    <div class="section-title"><span>DESIGNS</span><h2>选择设计</h2></div>
+    <div id="template-grid" class="template-grid"></div>
+  </section>
+
+  <section id="studio" class="studio section-shell">
+    <aside class="editor">
+      <div class="editor-head">
+        <div><small>WEBSITE</small><h2>网站内容</h2></div>
+        <button id="reset" class="icon-button" type="button" aria-label="重置">↺</button>
       </div>
-      <div class="hero-preview shell">
-        <div class="window-bar"><i></i><i></i><i></i><span>LIVE PREVIEW</span></div>
-        <div class="mini-site">
-          <div class="mini-nav"><b>山海空间设计</b><span>服务　案例　关于　联系</span></div>
-          <div class="mini-hero">
-            <small>成都 · 全屋定制</small>
-            <h3>让每一寸空间<br>更适合真实生活</h3>
-            <p>设计 · 定制 · 安装</p>
-            <button>预约咨询</button>
-          </div>
-          <div class="mini-cards"><span></span><span></span><span></span></div>
+      <div class="field-grid">
+        <label>商家名称<input id="name" maxlength="70" placeholder="山海空间设计"></label>
+        <label>城市<input id="city" maxlength="40" placeholder="成都"></label>
+        <label class="full">行业<select id="industry"></select></label>
+        <label>电话<input id="phone" maxlength="30" placeholder="138 0000 0000"></label>
+        <label>邮箱<input id="email" type="email" maxlength="100" placeholder="hello@example.com"></label>
+        <label class="full">品牌主张<input id="tagline" maxlength="100" placeholder="让每一寸空间，更适合真实生活"></label>
+        <label class="full">主要服务<textarea id="services" rows="3" maxlength="500" placeholder="定制橱柜，衣柜设计，空间收纳，安装服务"></textarea></label>
+        <label class="full">品牌介绍<textarea id="about" rows="4" maxlength="700" placeholder="介绍品牌、服务范围与特色"></textarea></label>
+        <label class="upload full"><span>主视觉图片</span><input id="hero-image" type="file" accept="image/jpeg,image/png,image/webp"><b id="hero-image-state">选择图片</b></label>
+        <label class="upload"><span>Logo</span><input id="logo-image" type="file" accept="image/jpeg,image/png,image/webp,image/svg+xml"><b id="logo-image-state">选择图片</b></label>
+        <label class="upload"><span>案例图片</span><input id="gallery-images" type="file" accept="image/jpeg,image/png,image/webp" multiple><b id="gallery-state">最多 6 张</b></label>
+      </div>
+      <button id="generate" class="primary-button full-button" type="button">生成网站</button>
+    </aside>
+
+    <section class="preview-wrap" id="preview-wrap">
+      <div class="preview-toolbar">
+        <div class="device-switch">
+          <button class="device active" data-width="100%" type="button">电脑</button>
+          <button class="device" data-width="390px" type="button">手机</button>
+        </div>
+        <button id="change-template" class="text-button" type="button">更换设计</button>
+      </div>
+      <div class="preview-stage"><iframe id="preview" title="网站预览"></iframe></div>
+      <div class="action-bar">
+        <div class="url-box"><small>网站链接</small><code id="site-url"></code></div>
+        <div class="action-buttons">
+          <button id="edit-site" class="secondary-button" type="button">修改</button>
+          <button id="share-site" class="secondary-button" type="button">转发</button>
+          <button id="use-site" class="primary-button" type="button">一键使用</button>
         </div>
       </div>
     </section>
+  </section>
+</main>
 
-    <section id="builder" class="builder-section">
-      <div class="section-head">
-        <span>CREATE</span>
-        <h2>创建你的商家网站</h2>
-      </div>
+<footer>
+  <div><strong>商家网站</strong><small>Business Website Studio</small></div>
+  <nav><a href="privacy.html">隐私</a><a href="terms.html">条款</a><a href="acceptable-use.html">使用规范</a><a href="report.html">举报</a></nav>
+  <span>© 2026 · v1.0</span>
+</footer>
 
-      <div class="builder-grid">
-        <section class="editor-panel">
-          <div class="panel-top">
-            <div><b>网站内容</b><small id="save-state">未保存</small></div>
-            <button id="clear-form" class="text-btn" type="button">重置</button>
-          </div>
-          <div class="progress"><span id="progress-bar"></span></div>
+<dialog id="upgrade-dialog">
+  <div class="modal">
+    <button class="modal-close" data-close="upgrade-dialog" aria-label="关闭">×</button>
+    <span class="modal-kicker">BUSINESS</span>
+    <h2>升级品牌网站</h2>
+    <div class="price"><b id="monthly-price">$15</b><span>/ 月</span></div>
+    <div class="benefits"><span>移除平台标识</span><span>设置专属链接</span><span>绑定独立域名</span><span>高级模板与图片</span></div>
+    <label class="checkout-email">付款邮箱<input id="checkout-email" type="email" placeholder="you@example.com"></label>
+    <button id="checkout-monthly" class="primary-button full-button" type="button">按月开通</button>
+    <button id="checkout-yearly" class="secondary-button full-button" type="button">按年开通</button>
+    <p id="checkout-message" class="modal-message" role="status"></p>
+  </div>
+</dialog>
 
-          <div class="form-grid">
-            <label>商家名称<input id="name" maxlength="60" placeholder="山海空间设计" /></label>
-            <label>所在城市<input id="city" maxlength="40" placeholder="成都" /></label>
-            <label>所属行业
-              <select id="industry">
-                <option value="装修与定制">装修与定制</option>
-                <option value="门窗与窗帘">门窗与窗帘</option>
-                <option value="餐饮与零售">餐饮与零售</option>
-                <option value="设备与制造">设备与制造</option>
-                <option value="家政与安装">家政与安装</option>
-                <option value="专业服务">专业服务</option>
-              </select>
-            </label>
-            <label>联系电话<input id="phone" maxlength="30" placeholder="138 0000 0000" /></label>
-            <label class="full">品牌主张<input id="tagline" maxlength="90" placeholder="让每一寸空间，更适合真实生活" /></label>
-            <label class="full">主要服务<textarea id="services" rows="4" maxlength="300" placeholder="定制橱柜，衣柜设计，空间收纳，安装服务"></textarea></label>
-            <label class="full">商家介绍<textarea id="about" rows="5" maxlength="500" placeholder="介绍品牌、经验、服务范围与优势"></textarea></label>
-            <label class="full upload-field">主视觉图片<input id="hero-image" type="file" accept="image/*" /><span id="image-state">选择图片</span></label>
-            <label>网站风格
-              <select id="theme">
-                <option value="midnight">深色高级</option>
-                <option value="ivory">简约明亮</option>
-                <option value="earth">自然温暖</option>
-              </select>
-            </label>
-            <label>网站短名<input id="slug" maxlength="40" placeholder="yourbrand" /></label>
-          </div>
+<dialog id="billing-dialog">
+  <div class="modal">
+    <button class="modal-close" data-close="billing-dialog" aria-label="关闭">×</button>
+    <span class="modal-kicker">BILLING</span>
+    <h2>会员管理</h2>
+    <label class="checkout-email">付款邮箱<input id="billing-email" type="email" placeholder="you@example.com"></label>
+    <button id="open-portal" class="primary-button full-button" type="button">打开会员管理</button>
+    <p id="billing-message" class="modal-message" role="status"></p>
+  </div>
+</dialog>
 
-          <div class="slug-preview"><span>品牌地址</span><code><b id="slug-output">yourbrand</b>.com</code></div>
-
-          <div class="editor-actions single-action">
-            <button id="generate-site" class="btn primary" type="button">生成网站</button>
-          </div>
-        </section>
-
-        <section class="preview-panel">
-          <div class="preview-toolbar">
-            <div><button class="device active" data-width="100%" type="button">电脑</button><button class="device" data-width="390px" type="button">手机</button></div>
-            <span class="preview-badge">实时预览</span>
-          </div>
-          <div class="preview-stage"><iframe id="site-preview" title="商家网站实时预览"></iframe></div>
-          <div class="site-use-bar" id="site-use-bar">
-            <div class="share-link"><small>网站链接</small><code id="share-link-output"></code></div>
-            <div class="site-use-actions">
-              <button id="use-site" class="btn primary" type="button">一键使用</button>
-              <button id="share-site" class="btn ghost dark" type="button">转发</button>
-              <button id="edit-link" class="btn ghost dark" type="button">修改链接</button>
-            </div>
-          </div>
-        </section>
-      </div>
-    </section>
-
-
-  </main>
-
-  <footer>
-    <div><b>商家网站</b><span>Business Website Builder</span></div>
-    <div><a href="privacy.html">隐私</a><a href="mailto:shangjiawangzhan@gmail.com">联系</a></div>
-    <small>© 2026 Shangjia Wangzhan · v1.0</small>
-  </footer>
-
-  <dialog id="publish-dialog">
-    <form method="dialog">
-      <button class="dialog-close" value="cancel" aria-label="关闭">×</button>
-      <span class="dialog-icon">↗</span>
-      <h3>修改网站链接</h3>
-      <div class="publish-options"><div><small>品牌域名</small><code id="dialog-domain">yourbrand.com</code></div></div>
-      <a class="btn primary full-btn" id="publish-contact" href="mailto:shangjiawangzhan@gmail.com">开通独立链接</a>
-    </form>
-  </dialog>
-
-  <script src="script.js?v=1.0.0"></script>
+<script src="config.js?v=1.0.0"></script>
+<script src="script.js?v=1.0.0"></script>
 </body>
 </html>

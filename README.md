@@ -1,5 +1,3 @@
-# Business Website
+# Business Website v2.0
 
-Create and publish a polished business website from a simple description.
-
-Official website: https://shangjiawangzhan.com
+Two free website creations, followed by monthly or yearly subscription.

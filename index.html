@@ -3,13 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>商家网站｜快速生成品牌官网</title>
-  <meta name="description" content="输入商家名称，选择行业，立即生成并分享你的品牌网站。">
-  <meta name="theme-color" content="#07111d">
-  <meta name="application-version" content="1.0.0">
+  <title>商家网站｜为真实商家建立清晰官网</title>
+  <meta name="description" content="填写商家信息并上传真实图片，生成适合展示、分享和联系客户的商家网站。">
+  <meta name="theme-color" content="#0b1724">
+  <meta name="application-version" content="2.0">
   <link rel="canonical" href="https://shangjiawangzhan.com/">
-  <link rel="preconnect" href="https://images.unsplash.com">
-  <link rel="stylesheet" href="styles.css?v=1.0.0">
+  <link rel="stylesheet" href="assets/css/main.css?v=2.0">
+  <link rel="stylesheet" href="assets/css/forms.css?v=2.0">
+  <link rel="stylesheet" href="assets/css/responsive.css?v=2.0">
 </head>
 <body>
 <header class="topbar">
@@ -17,76 +18,171 @@
     <span class="brand-mark">商</span>
     <span><strong>商家网站</strong><small>SHANGJIA WANGZHAN</small></span>
   </a>
-  <div class="top-actions">
+  <nav class="top-actions" aria-label="顶部导航">
+    <a href="#examples">适合谁</a>
+    <a href="#how-it-works">使用方式</a>
     <button id="manage-billing" class="text-button" type="button">会员管理</button>
-  </div>
+  </nav>
 </header>
 
 <main id="top">
-  <section id="studio" class="creator-hero">
-    <div class="creator-copy">
+  <section class="hero section-shell">
+    <div class="hero-copy">
       <span class="eyebrow">BUSINESS WEBSITE STUDIO</span>
-      <h1>几秒生成<br><em>你的商家网站</em></h1>
-      <p>输入名称，选择行业。</p>
+      <h1>把真实商家信息<br><em>整理成一个清晰网站</em></h1>
+      <p>填写名称、行业和城市，上传与你业务相符的真实图片。网站内容由服务器生成，重要信息由你确认。</p>
+      <div class="hero-points" aria-label="服务特点">
+        <span>中文商家友好</span>
+        <span>手机与电脑适配</span>
+        <span>可预览后再使用</span>
+      </div>
     </div>
 
-    <aside class="creator-card editor smart-builder">
-      <div class="creator-field creator-name">
-        <label for="name">商家名称</label>
-        <input id="name" maxlength="70" autocomplete="organization" placeholder="例如：新雅橱柜">
+    <aside class="builder-card" aria-labelledby="builder-title">
+      <div class="builder-heading">
+        <span class="eyebrow">START HERE</span>
+        <h2 id="builder-title">创建商家网站</h2>
+        <p>先填写最重要的信息，其他内容可以稍后补充。</p>
       </div>
 
-      <div class="creator-field">
-        <label for="industry">主要行业</label>
-        <select id="industry" aria-label="选择行业"></select>
-      </div>
-
-      <div class="quick-options">
-        <div class="creator-field compact-field">
-          <label for="city">城市 <span>可选</span></label>
-          <input id="city" maxlength="40" autocomplete="address-level2" placeholder="成都">
+      <form id="site-form" novalidate>
+        <div class="field">
+          <label for="name">商家名称 <b>*</b></label>
+          <input id="name" name="name" maxlength="70" autocomplete="organization" placeholder="例如：新雅橱柜" required>
         </div>
-        <label class="photo-option">
-          <input id="hero-image" type="file" accept="image/jpeg,image/png,image/webp">
-          <span>添加照片</span>
-          <b id="hero-image-state">可选</b>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="industry">主要行业 <b>*</b></label>
+            <select id="industry" name="industry" required>
+              <option value="">请选择行业</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="city">城市 <b>*</b></label>
+            <input id="city" name="city" maxlength="40" autocomplete="address-level2" placeholder="例如：成都" required>
+          </div>
+        </div>
+
+        <div class="upload-panel">
+          <div>
+            <strong>上传一张与你业务相符的主图</strong>
+            <small>建议使用店内、产品、服务现场或真实作品照片。</small>
+          </div>
+          <label class="upload-button" for="hero-image">选择图片</label>
+          <input id="hero-image" name="heroImage" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+          <span id="hero-image-state" class="upload-state">尚未选择</span>
+        </div>
+
+        <button id="toggle-details" class="detail-toggle" type="button" aria-expanded="false" aria-controls="advanced-fields">补充更多信息</button>
+
+        <div id="advanced-fields" class="advanced-fields" hidden>
+          <div class="field-row">
+            <div class="field">
+              <label for="phone">联系电话</label>
+              <input id="phone" name="phone" maxlength="30" autocomplete="tel" placeholder="电话或手机">
+            </div>
+            <div class="field">
+              <label for="email">联系邮箱</label>
+              <input id="email" name="email" type="email" maxlength="100" autocomplete="email" placeholder="you@example.com">
+            </div>
+          </div>
+          <div class="field">
+            <label for="tagline">一句话介绍</label>
+            <input id="tagline" name="tagline" maxlength="100" placeholder="例如：专注定制橱柜与全屋收纳">
+          </div>
+          <div class="field">
+            <label for="services">主要产品或服务</label>
+            <textarea id="services" name="services" rows="3" maxlength="500" placeholder="例如：橱柜定制、衣柜定制、上门测量、安装服务"></textarea>
+          </div>
+          <div class="field">
+            <label for="about">商家介绍</label>
+            <textarea id="about" name="about" rows="4" maxlength="700" placeholder="介绍你的业务、服务区域和客户可以联系你的原因。"></textarea>
+          </div>
+          <div class="field-row">
+            <div class="upload-panel compact-upload">
+              <div><strong>Logo</strong><small>可选</small></div>
+              <label class="upload-button" for="logo-image">选择</label>
+              <input id="logo-image" name="logoImage" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+              <span id="logo-image-state" class="upload-state">未选择</span>
+            </div>
+            <div class="upload-panel compact-upload">
+              <div><strong>案例图片</strong><small>最多 6 张</small></div>
+              <label class="upload-button" for="gallery-images">选择</label>
+              <input id="gallery-images" name="galleryImages" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>
+              <span id="gallery-state" class="upload-state">未选择</span>
+            </div>
+          </div>
+        </div>
+
+        <label class="confirmation-row">
+          <input id="confirm-content" type="checkbox" required>
+          <span>我有权使用所提交的图片和资料，并会确认公开内容真实准确。</span>
         </label>
-      </div>
 
-      <button id="generate" class="primary-button full-button smart-generate" type="button">生成网站</button>
-      <p id="create-message" class="create-message" role="status"></p>
-
-      <button id="toggle-details" class="detail-toggle" type="button">更多内容</button>
-      <div id="advanced-fields" class="advanced-fields" hidden>
-        <input id="phone" maxlength="30" autocomplete="tel" placeholder="联系电话">
-        <input id="email" type="email" maxlength="100" autocomplete="email" placeholder="邮箱">
-        <input id="tagline" maxlength="100" placeholder="品牌主张">
-        <textarea id="services" rows="3" maxlength="500" placeholder="主要服务，用逗号分开"></textarea>
-        <textarea id="about" rows="4" maxlength="700" placeholder="品牌介绍"></textarea>
-        <div class="mini-upload-row">
-          <label class="upload"><span>Logo</span><input id="logo-image" type="file" accept="image/jpeg,image/png,image/webp,image/svg+xml"><b id="logo-image-state">选择</b></label>
-          <label class="upload"><span>案例图片</span><input id="gallery-images" type="file" accept="image/jpeg,image/png,image/webp" multiple><b id="gallery-state">最多 6 张</b></label>
-        </div>
-      </div>
-      <button id="reset" class="reset-link" type="button">重新开始</button>
+        <button id="generate" class="primary-button full-button" type="submit">生成网站预览</button>
+        <p id="create-message" class="form-message" role="status" aria-live="polite"></p>
+        <button id="reset" class="reset-link" type="button">清空重新填写</button>
+      </form>
     </aside>
   </section>
 
-  <section class="preview-wrap section-shell preview-hidden" id="preview-wrap">
+  <section id="examples" class="examples section-shell">
+    <div class="section-heading">
+      <span class="eyebrow">REAL BUSINESS</span>
+      <h2>适合需要清晰展示的真实商家</h2>
+      <p>图片应当与实际业务相符。下面只展示常见使用场景，不代表系统内部规则。</p>
+    </div>
+    <div class="example-grid">
+      <article class="example-card">
+        <img src="assets/images/home-interior.jpg" alt="现代橱柜与厨房空间" loading="lazy">
+        <div><span>HOME & INTERIOR</span><h3>家装、橱柜、门窗</h3><p>展示真实项目、服务区域、联系方式和预约入口。</p></div>
+      </article>
+      <article class="example-card">
+        <img src="assets/images/food-local.jpg" alt="餐厅用餐空间" loading="lazy">
+        <div><span>FOOD & LOCAL</span><h3>餐饮、零售、本地服务</h3><p>让客户快速了解主营内容、营业信息和联系方法。</p></div>
+      </article>
+      <article class="example-card">
+        <img src="assets/images/professional-services.jpg" alt="专业服务办公空间" loading="lazy">
+        <div><span>PROFESSIONAL</span><h3>贸易、咨询、专业服务</h3><p>整理公司介绍、产品服务和正式业务联系方式。</p></div>
+      </article>
+    </div>
+  </section>
+
+  <section id="how-it-works" class="steps section-shell">
+    <div class="section-heading compact-heading">
+      <span class="eyebrow">HOW IT WORKS</span>
+      <h2>三步完成</h2>
+    </div>
+    <div class="step-grid">
+      <article><b>01</b><h3>填写商家信息</h3><p>提供名称、行业、城市和真实联系方式。</p></article>
+      <article><b>02</b><h3>上传相关图片</h3><p>使用与你的产品、场地或服务相符的图片。</p></article>
+      <article><b>03</b><h3>确认网站结果</h3><p>预览内容，确认无误后再分享或开通使用。</p></article>
+    </div>
+  </section>
+
+  <section class="preview-wrap section-shell" id="preview-wrap" hidden>
     <div class="preview-toolbar">
-      <div class="device-switch">
+      <div>
+        <span class="eyebrow">PREVIEW</span>
+        <h2>网站预览</h2>
+      </div>
+      <div class="device-switch" aria-label="预览设备">
         <button class="device active" data-width="100%" type="button">电脑</button>
         <button class="device" data-width="390px" type="button">手机</button>
       </div>
-      <button id="change-template" class="text-button" type="button">换一个风格</button>
     </div>
-    <div class="preview-stage"><iframe id="preview" title="网站预览"></iframe></div>
+    <div id="preview-loading" class="preview-loading" hidden>
+      <span class="spinner" aria-hidden="true"></span>
+      <strong>服务器正在生成网站预览…</strong>
+    </div>
+    <div class="preview-stage"><iframe id="preview" title="网站预览" sandbox="allow-same-origin allow-forms allow-popups" referrerpolicy="no-referrer"></iframe></div>
     <div class="action-bar">
-      <div class="url-box"><small>网站链接</small><code id="site-url"></code></div>
+      <div class="url-box"><small>网站链接</small><code id="site-url">生成后显示</code></div>
       <div class="action-buttons">
-        <button id="edit-site" class="secondary-button" type="button">修改</button>
-        <button id="share-site" class="secondary-button" type="button">转发</button>
-        <button id="use-site" class="primary-button" type="button">使用此网站</button>
+        <button id="edit-site" class="secondary-button" type="button">返回修改</button>
+        <button id="share-site" class="secondary-button" type="button" disabled>转发</button>
+        <button id="use-site" class="primary-button" type="button" disabled>使用此网站</button>
       </div>
     </div>
   </section>
@@ -94,46 +190,38 @@
 
 <footer>
   <div><strong>商家网站</strong><small>Business Website Studio</small></div>
-  <nav><a href="privacy.html">隐私</a><a href="terms.html">条款</a><a href="acceptable-use.html">使用规范</a><a href="report.html">举报</a></nav>
-  <span>© 2026 · v1.0</span>
+  <nav><a href="pages/privacy.html">隐私</a><a href="pages/terms.html">条款</a><a href="pages/acceptable-use.html">使用规范</a><a href="pages/report.html">举报</a></nav>
+  <span>© 2026 · v2.0</span>
 </footer>
-
-<dialog id="design-dialog">
-  <div class="design-modal">
-    <div class="design-modal-head">
-      <div><span class="modal-kicker">DESIGNS</span><h2>换一个风格</h2></div>
-      <button class="modal-close" data-close="design-dialog" aria-label="关闭">×</button>
-    </div>
-    <div id="template-grid" class="template-grid"></div>
-  </div>
-</dialog>
 
 <dialog id="upgrade-dialog">
   <div class="modal">
     <button class="modal-close" data-close="upgrade-dialog" aria-label="关闭">×</button>
-    <span class="modal-kicker">BUSINESS</span>
-    <h2>升级品牌网站</h2>
+    <span class="eyebrow">BUSINESS</span>
+    <h2>开通商家网站</h2>
     <div class="price"><b id="monthly-price">$15</b><span>/ 月</span></div>
-    <div class="benefits"><span>移除平台标识</span><span>设置专属链接</span><span>绑定独立域名</span><span>高级模板与图片</span></div>
+    <div class="benefits"><span>正式网站使用</span><span>专属网站链接</span><span>独立域名支持</span><span>网站内容管理</span></div>
     <label class="checkout-email">付款邮箱<input id="checkout-email" type="email" placeholder="you@example.com"></label>
     <button id="checkout-monthly" class="primary-button full-button" type="button">按月开通</button>
     <button id="checkout-yearly" class="secondary-button full-button" type="button">按年开通</button>
-    <p id="checkout-message" class="modal-message" role="status"></p>
+    <p id="checkout-message" class="form-message" role="status"></p>
   </div>
 </dialog>
 
 <dialog id="billing-dialog">
   <div class="modal">
     <button class="modal-close" data-close="billing-dialog" aria-label="关闭">×</button>
-    <span class="modal-kicker">BILLING</span>
+    <span class="eyebrow">BILLING</span>
     <h2>会员管理</h2>
     <label class="checkout-email">付款邮箱<input id="billing-email" type="email" placeholder="you@example.com"></label>
     <button id="open-portal" class="primary-button full-button" type="button">打开会员管理</button>
-    <p id="billing-message" class="modal-message" role="status"></p>
+    <p id="billing-message" class="form-message" role="status"></p>
   </div>
 </dialog>
 
-<script src="config.js?v=1.0.0"></script>
-<script src="script.js?v=1.0.0"></script>
+<script src="assets/js/config.js?v=2.0"></script>
+<script src="assets/js/api.js?v=2.0"></script>
+<script src="assets/js/ui.js?v=2.0"></script>
+<script src="assets/js/app.js?v=2.0"></script>
 </body>
 </html>

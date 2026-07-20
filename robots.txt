@@ -1,5 +1,3 @@
 User-agent: *
 Allow: /
-Disallow: /preview/
-Disallow: /view/
 Sitemap: https://shangjiawangzhan.com/sitemap.xml

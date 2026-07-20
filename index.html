@@ -3,214 +3,139 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>商家网站｜快速创建商家官网</title>
-  <meta name="description" content="输入商家名称和基本信息，快速生成清晰、专业的商家网站。">
-  <meta name="theme-color" content="#0b1320">
+  <title>商家网站｜立即生成你的商业网站</title>
+  <meta name="description" content="输入几项商家信息，立即生成清晰、专业、适合手机查看的商业网站。">
+  <meta name="theme-color" content="#ffffff">
   <meta name="application-version" content="2.0">
   <link rel="canonical" href="https://shangjiawangzhan.com/">
-  <link rel="stylesheet" href="assets/css/main.css?v=2.0">
-  <link rel="stylesheet" href="assets/css/forms.css?v=2.0">
-  <link rel="stylesheet" href="assets/css/responsive.css?v=2.0">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="assets/css/app.css?v=2.0">
 </head>
 <body>
-<header class="topbar">
-  <a class="brand" href="#top" aria-label="商家网站首页">
-    <span class="brand-mark">商</span>
-    <span class="brand-name"><strong>商家网站</strong><small>SHANGJIA WANGZHAN</small></span>
-  </a>
-  <button id="manage-billing" class="member-button" type="button">会员管理</button>
-</header>
-
-<main id="top">
-  <section class="hero section-shell">
-    <div class="hero-copy">
-      <span class="eyebrow">CREATE YOUR BUSINESS WEBSITE</span>
-      <h1>几分钟，生成你的<br><em>商家网站</em></h1>
-      <p>填写最基本的信息，就可以先看网站效果。</p>
-      <div class="trust-row" aria-label="主要特点">
-        <span>简单</span><i></i><span>专业</span><i></i><span>手机适配</span>
-      </div>
+  <header class="app-header">
+    <a class="brand" href="/" aria-label="商家网站">
+      <span class="brand-icon">商</span>
+      <span class="brand-text" data-zh="商家网站" data-en="Business Website">商家网站</span>
+    </a>
+    <div class="header-actions">
+      <button id="language-toggle" class="text-button" type="button" aria-label="Switch language">EN</button>
+      <button id="manage-billing" class="text-button" type="button" data-zh="会员" data-en="Account">会员</button>
     </div>
+  </header>
 
-    <section class="builder-card" aria-labelledby="builder-title">
-      <div class="builder-heading">
-        <span class="step-label">开始创建</span>
-        <h2 id="builder-title">你的商家是做什么的？</h2>
+  <main class="app-main">
+    <section id="create-view" class="create-view">
+      <div class="intro">
+        <p class="kicker" data-zh="立即创建" data-en="Create instantly">立即创建</p>
+        <h1 data-zh="生成你的商家网站" data-en="Create your business website">生成你的商家网站</h1>
+        <p data-zh="填写几项信息，马上查看网站。" data-en="Enter a few details and see your website instantly.">填写几项信息，马上查看网站。</p>
       </div>
 
-      <form id="site-form" novalidate>
-        <fieldset class="industry-fieldset">
-          <legend class="sr-only">选择行业</legend>
-          <div id="industry-grid" class="industry-grid">
-            <label class="industry-card">
-              <input type="radio" name="industry" value="home-services" required>
-              <span class="industry-icon">🏠</span><strong>家装服务</strong><small>装修 · 橱柜 · 门窗</small>
-            </label>
-            <label class="industry-card">
-              <input type="radio" name="industry" value="food-local" required>
-              <span class="industry-icon">🍜</span><strong>餐饮美食</strong><small>餐厅 · 食品 · 咖啡</small>
-            </label>
-            <label class="industry-card">
-              <input type="radio" name="industry" value="retail-trade" required>
-              <span class="industry-icon">🛍️</span><strong>零售贸易</strong><small>门店 · 批发 · 产品</small>
-            </label>
-            <label class="industry-card">
-              <input type="radio" name="industry" value="beauty-wellness" required>
-              <span class="industry-icon">✨</span><strong>美容健康</strong><small>美容 · 护理 · 健康</small>
-            </label>
-            <label class="industry-card">
-              <input type="radio" name="industry" value="professional-services" required>
-              <span class="industry-icon">💼</span><strong>专业服务</strong><small>咨询 · 地产 · 商务</small>
-            </label>
-            <label class="industry-card">
-              <input type="radio" name="industry" value="other" required>
-              <span class="industry-icon">＋</span><strong>其他行业</strong><small>更多商家类型</small>
-            </label>
-          </div>
-        </fieldset>
-
-        <div class="field featured-field">
-          <label for="name">商家名称</label>
-          <input id="name" name="name" maxlength="70" autocomplete="organization" placeholder="例如：新雅橱柜" required>
+      <form id="site-form" class="generator" novalidate>
+        <div class="input-group">
+          <label for="name" data-zh="商家名称" data-en="Business name">商家名称</label>
+          <input id="name" name="name" maxlength="80" autocomplete="organization" required
+                 placeholder="例如：新雅橱柜" data-placeholder-zh="例如：新雅橱柜" data-placeholder-en="Example: Nova Cabinetry">
         </div>
 
-        <div class="field-row compact-row">
-          <div class="field">
-            <label for="city">所在城市</label>
-            <input id="city" name="city" maxlength="40" autocomplete="address-level2" placeholder="例如：成都" required>
+        <div class="input-group">
+          <label for="industry" data-zh="你做什么生意？" data-en="What does your business do?">你做什么生意？</label>
+          <input id="industry" name="industry" maxlength="100" required
+                 placeholder="例如：橱柜定制、餐厅、美容服务" data-placeholder-zh="例如：橱柜定制、餐厅、美容服务" data-placeholder-en="Example: cabinetry, restaurant, beauty services">
+        </div>
+
+        <div class="two-columns">
+          <div class="input-group">
+            <label for="location" data-zh="城市 / 地区" data-en="City / Region">城市 / 地区</label>
+            <input id="location" name="location" maxlength="80" autocomplete="address-level2" required
+                   placeholder="例如：成都" data-placeholder-zh="例如：成都" data-placeholder-en="Example: Los Angeles">
           </div>
-          <div class="field">
-            <label for="contact">联系方式</label>
-            <input id="contact" name="contact" maxlength="60" autocomplete="tel" placeholder="电话或微信" required>
+          <div class="input-group">
+            <label for="contact" data-zh="联系方式" data-en="Contact">联系方式</label>
+            <input id="contact" name="contact" maxlength="100" autocomplete="tel" required
+                   placeholder="电话、微信或邮箱" data-placeholder-zh="电话、微信或邮箱" data-placeholder-en="Phone, email, or messaging app">
           </div>
         </div>
 
-        <div class="upload-drop">
+        <div class="upload-row">
           <input id="hero-image" name="heroImage" type="file" accept="image/jpeg,image/png,image/webp" hidden>
-          <label for="hero-image">
-            <span class="upload-plus">＋</span>
-            <span><strong>添加一张商家图片</strong><small id="hero-image-state">可选，后面也可以更换</small></span>
+          <label for="hero-image" class="upload-button">
+            <span class="upload-icon">＋</span>
+            <span>
+              <strong data-zh="添加图片" data-en="Add a photo">添加图片</strong>
+              <small id="hero-image-state" data-zh="可选" data-en="Optional">可选</small>
+            </span>
           </label>
         </div>
 
-        <button id="toggle-details" class="detail-toggle" type="button" aria-expanded="false" aria-controls="advanced-fields">添加更多信息</button>
-
-        <div id="advanced-fields" class="advanced-fields" hidden>
-          <div class="field">
-            <label for="tagline">一句话介绍</label>
-            <input id="tagline" name="tagline" maxlength="100" placeholder="例如：专注定制橱柜与全屋收纳">
-          </div>
-          <div class="field-row">
-            <div class="field">
-              <label for="email">联系邮箱</label>
-              <input id="email" name="email" type="email" maxlength="100" autocomplete="email" placeholder="you@example.com">
-            </div>
-            <div class="field">
-              <label for="logo-image">Logo</label>
-              <input id="logo-image" name="logoImage" class="file-input" type="file" accept="image/jpeg,image/png,image/webp">
-              <small id="logo-image-state" class="file-state">未选择</small>
-            </div>
-          </div>
-          <div class="field">
-            <label for="services">主要产品或服务</label>
-            <textarea id="services" name="services" rows="3" maxlength="500" placeholder="不填写也可以"></textarea>
-          </div>
-          <div class="field">
-            <label for="about">商家介绍</label>
-            <textarea id="about" name="about" rows="4" maxlength="700" placeholder="不填写也可以"></textarea>
-          </div>
-          <div class="field">
-            <label for="gallery-images">更多图片</label>
-            <input id="gallery-images" name="galleryImages" class="file-input" type="file" accept="image/jpeg,image/png,image/webp" multiple>
-            <small id="gallery-state" class="file-state">最多 6 张</small>
-          </div>
-        </div>
-
-        <label class="confirmation-row">
-          <input id="confirm-content" type="checkbox" required>
-          <span>我确认提交的资料和图片可以用于创建网站。</span>
-        </label>
-
-        <button id="generate" class="primary-button full-button" type="submit">
-          <span>生成我的网站</span><b aria-hidden="true">→</b>
+        <button id="generate" class="generate-button" type="submit">
+          <span data-zh="立即生成" data-en="Generate now">立即生成</span>
+          <b aria-hidden="true">→</b>
         </button>
-        <p id="create-message" class="form-message" role="status" aria-live="polite"></p>
+        <p id="create-message" class="message" role="status" aria-live="polite"></p>
       </form>
     </section>
-  </section>
 
-  <section class="showcase section-shell" aria-label="网站展示场景">
-    <article class="showcase-card large">
-      <img src="assets/images/home-interior.jpg" alt="现代家装与厨房空间" loading="lazy">
-      <div><span>家装与本地服务</span><h2>让客户一眼看懂你做什么</h2></div>
-    </article>
-    <article class="showcase-card">
-      <img src="assets/images/food-local.jpg" alt="餐饮与本地商家空间" loading="lazy">
-      <div><span>餐饮与零售</span><h2>展示产品与联系方式</h2></div>
-    </article>
-    <article class="showcase-card">
-      <img src="assets/images/professional-services.jpg" alt="专业服务办公空间" loading="lazy">
-      <div><span>专业服务</span><h2>建立清晰的业务形象</h2></div>
-    </article>
-  </section>
-
-  <section class="preview-wrap section-shell" id="preview-wrap" hidden>
-    <div class="preview-toolbar">
-      <div><span class="eyebrow">YOUR WEBSITE</span><h2>你的网站已生成</h2></div>
-      <div class="device-switch" aria-label="预览设备">
-        <button class="device active" data-width="100%" type="button">电脑</button>
-        <button class="device" data-width="390px" type="button">手机</button>
+    <section id="preview-view" class="preview-view" hidden>
+      <div class="preview-header">
+        <div>
+          <p class="kicker" data-zh="你的网站" data-en="Your website">你的网站</p>
+          <h2 data-zh="已经生成" data-en="Ready">已经生成</h2>
+        </div>
+        <div class="preview-actions-top">
+          <button id="edit-site" class="small-button" type="button" data-zh="修改" data-en="Edit">修改</button>
+          <button id="share-site" class="small-button" type="button" disabled data-zh="分享" data-en="Share">分享</button>
+          <button id="use-site" class="small-button primary" type="button" disabled data-zh="发布" data-en="Publish">发布</button>
+        </div>
       </div>
-    </div>
-    <div id="preview-loading" class="preview-loading" hidden>
-      <span class="spinner" aria-hidden="true"></span>
-      <strong id="progress-text">正在创建网站…</strong>
-    </div>
-    <div class="preview-stage"><iframe id="preview" title="网站预览" sandbox="allow-same-origin allow-forms allow-popups" referrerpolicy="no-referrer"></iframe></div>
-    <div class="action-bar">
-      <div class="url-box"><small>网站链接</small><code id="site-url">生成后显示</code></div>
-      <div class="action-buttons">
-        <button id="edit-site" class="secondary-button" type="button">修改</button>
-        <button id="share-site" class="secondary-button" type="button" disabled>分享</button>
-        <button id="use-site" class="primary-button" type="button" disabled>开通网站</button>
+
+      <div id="preview-loading" class="loading-state" hidden>
+        <span class="spinner"></span>
+        <strong id="progress-text" data-zh="正在生成…" data-en="Creating…">正在生成…</strong>
       </div>
+
+      <div class="preview-frame-wrap">
+        <iframe id="preview" title="网站预览" sandbox="allow-same-origin allow-forms allow-popups" referrerpolicy="no-referrer"></iframe>
+      </div>
+      <code id="site-url" class="site-url"></code>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <span>© 2026</span>
+    <nav>
+      <a href="pages/privacy.html" data-zh="隐私" data-en="Privacy">隐私</a>
+      <a href="pages/terms.html" data-zh="条款" data-en="Terms">条款</a>
+      <a href="pages/report.html" data-zh="联系" data-en="Contact">联系</a>
+    </nav>
+  </footer>
+
+  <dialog id="upgrade-dialog">
+    <div class="modal">
+      <button class="close-button" type="button" data-close="upgrade-dialog" aria-label="Close">×</button>
+      <p class="kicker" data-zh="发布网站" data-en="Publish website">发布网站</p>
+      <h2 data-zh="开通你的网站" data-en="Publish your website">开通你的网站</h2>
+      <div class="price"><b id="monthly-price">$15</b><span data-zh="/ 月" data-en="/ month">/ 月</span></div>
+      <input id="checkout-email" type="email" autocomplete="email" placeholder="you@example.com">
+      <button id="checkout-monthly" class="generate-button" type="button" data-zh="按月开通" data-en="Monthly plan">按月开通</button>
+      <button id="checkout-yearly" class="outline-button" type="button" data-zh="按年开通 · $149" data-en="Yearly plan · $149">按年开通 · $149</button>
+      <p id="checkout-message" class="message" role="status" aria-live="polite"></p>
     </div>
-  </section>
-</main>
+  </dialog>
 
-<footer>
-  <div><strong>商家网站</strong><small>© 2026 · v2.0</small></div>
-  <nav><a href="pages/privacy.html">隐私</a><a href="pages/terms.html">条款</a><a href="pages/acceptable-use.html">使用规则</a><a href="pages/report.html">联系我们</a></nav>
-</footer>
+  <dialog id="billing-dialog">
+    <div class="modal">
+      <button class="close-button" type="button" data-close="billing-dialog" aria-label="Close">×</button>
+      <p class="kicker" data-zh="会员" data-en="Account">会员</p>
+      <h2 data-zh="管理网站服务" data-en="Manage your website">管理网站服务</h2>
+      <input id="billing-email" type="email" autocomplete="email" placeholder="you@example.com">
+      <button id="open-portal" class="generate-button" type="button" data-zh="继续" data-en="Continue">继续</button>
+      <p id="billing-message" class="message" role="status" aria-live="polite"></p>
+    </div>
+  </dialog>
 
-<dialog id="upgrade-dialog">
-  <div class="modal">
-    <button class="modal-close" type="button" data-close="upgrade-dialog" aria-label="关闭">×</button>
-    <span class="eyebrow">PUBLISH</span>
-    <h2>开通你的网站</h2>
-    <div class="price"><b id="monthly-price">$15</b><span>/ 月</span></div>
-    <div class="benefits"><span>正式网站链接</span><span>手机端适配</span><span>内容更新</span><span>网站管理</span></div>
-    <label class="checkout-email"><span>付款邮箱</span><input id="checkout-email" type="email" autocomplete="email" placeholder="you@example.com"></label>
-    <button id="checkout-monthly" class="primary-button full-button" type="button">按月开通</button>
-    <button id="checkout-yearly" class="secondary-button full-button" type="button">按年开通 · $149</button>
-    <p id="checkout-message" class="form-message" role="status" aria-live="polite"></p>
-  </div>
-</dialog>
-
-<dialog id="billing-dialog">
-  <div class="modal">
-    <button class="modal-close" type="button" data-close="billing-dialog" aria-label="关闭">×</button>
-    <span class="eyebrow">MEMBERSHIP</span>
-    <h2>会员管理</h2>
-    <label class="checkout-email"><span>付款邮箱</span><input id="billing-email" type="email" autocomplete="email" placeholder="you@example.com"></label>
-    <button id="open-portal" class="primary-button full-button" type="button">打开会员管理</button>
-    <p id="billing-message" class="form-message" role="status" aria-live="polite"></p>
-  </div>
-</dialog>
-
-<script src="assets/js/config.js?v=2.0" defer></script>
-<script src="assets/js/api.js?v=2.0" defer></script>
-<script src="assets/js/ui.js?v=2.0" defer></script>
-<script src="assets/js/app.js?v=2.0" defer></script>
+  <script src="assets/js/config.js?v=2.0" defer></script>
+  <script src="assets/js/api.js?v=2.0" defer></script>
+  <script src="assets/js/app.js?v=2.0" defer></script>
 </body>
 </html>

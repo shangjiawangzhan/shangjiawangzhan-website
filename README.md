@@ -1,5 +1,5 @@
 # Business Website
 
-Create, preview, share, and publish a polished business website.
+Create and publish a polished business website from a simple description.
 
-https://shangjiawangzhan.com
+Official website: https://shangjiawangzhan.com

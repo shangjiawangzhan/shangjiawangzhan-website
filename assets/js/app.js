@@ -1,96 +1,37 @@
 (() => {
-  "use strict";
-  const cfg = window.SJW_CONFIG || {};
+  const $ = (id) => document.getElementById(id);
+  const cfg = window.SJW_CONFIG;
   const api = window.SJW_API;
-  const byId = id => document.getElementById(id);
-  const value = id => (byId(id)?.value || "").trim();
-  let language = (navigator.language || "").toLowerCase().startsWith("zh") ? "zh" : "en";
-  let selectedCategory = "home-services";
-  let currentResult = null;
-  let generating = false;
-  let checkoutBusy = false;
-  let portalBusy = false;
-  let progressTimer = null;
-  let progressValue = 7;
-
-  const categories = [
-    ["home-services","⌂","家居服务","Home Services"],
-    ["food-hospitality","✦","餐饮酒店","Food & Hospitality"],
-    ["retail","◇","零售贸易","Retail & Trade"],
-    ["professional","○","专业服务","Professional"],
-    ["beauty-wellness","✺","美容健康","Beauty & Wellness"],
-    ["manufacturing","▦","制造工业","Manufacturing"],
-    ["automotive","◈","汽车服务","Automotive"],
-    ["other","＋","其他行业","Other"]
-  ];
-
-  function t(zh,en){return language === "zh" ? zh : en;}
-  function setMessage(id,text="",type=""){const el=byId(id);if(!el)return;el.textContent=text;el.dataset.type=type;}
-  function setBusy(button,busy,text){if(!button)return;if(busy){button.dataset.original=button.innerHTML;button.textContent=text;button.disabled=true}else{button.innerHTML=button.dataset.original||button.innerHTML;button.disabled=false}}
-  function showView(id){["create-view","building-view","preview-view"].forEach(view=>{const el=byId(view);if(el)el.hidden=view!==id});window.scrollTo({top:0,behavior:"smooth"});}
-
-  function renderCategories(){
-    const box=byId("industry-options"); if(!box)return; box.replaceChildren();
-    categories.forEach(([id,icon,zh,en])=>{
-      const button=document.createElement("button"); button.type="button"; button.className=`industry-option${id===selectedCategory?" selected":""}`; button.dataset.id=id;
-      const iconEl=document.createElement("span");iconEl.textContent=icon;
-      const label=document.createElement("span");label.textContent=language==="zh"?zh:en;
-      button.append(iconEl,label);button.addEventListener("click",()=>{selectedCategory=id;renderCategories()});box.append(button);
-    });
-  }
-
-  function applyLanguage(){
-    document.documentElement.lang=language==="zh"?"zh-CN":"en";
-    document.querySelectorAll("[data-zh][data-en]").forEach(el=>el.textContent=el.dataset[language]);
-    document.querySelectorAll("[data-placeholder-zh][data-placeholder-en]").forEach(el=>el.placeholder=el.dataset[`placeholder${language==="zh"?"Zh":"En"}`]);
-    const toggle=byId("language-toggle");if(toggle)toggle.textContent=language==="zh"?"EN":"中文";renderCategories();
-  }
-
-  function makeSiteId(){return `sjw_${crypto.getRandomValues(new Uint32Array(3)).reduce((s,n)=>s+n.toString(36),"").slice(0,22)}`;}
-  function validateImage(file){if(!file)return;if(!(cfg.allowedImageTypes||[]).includes(file.type))throw new Error(t("请使用 JPG、PNG 或 WebP 图片","Use a JPG, PNG, or WebP image"));if(file.size>(cfg.maxHeroImageBytes||8388608))throw new Error(t("图片不能超过 8MB","Image must be under 8MB"));}
-  async function uploadImage(){const file=byId("hero-image")?.files?.[0];if(!file)return "";validateImage(file);const result=await api.uploadAsset(file);return result.assetId||"";}
-  function isAllowedPreview(raw){try{const u=new URL(raw);return u.protocol==="https:"&&(u.hostname==="api.shangjiawangzhan.com"||u.hostname==="shangjiawangzhan.com"||u.hostname.endsWith(".shangjiawangzhan.com"))}catch{return false}}
-  function validateStripeUrl(raw){const u=new URL(raw);if(u.protocol!=="https:"||!(cfg.allowedStripeHosts||[]).includes(u.hostname))throw new Error(t("无法打开付款页面","Unable to open checkout"));return u.href;}
-
-  function payload(heroImageId){
-    const specific=value("industry");
-    return {siteId:makeSiteId(),business:{name:value("name"),categoryId:selectedCategory,industry:specific,city:value("location"),contact:value("contact"),description:value("description"),services:value("services"),serviceArea:value("service-area")},assets:{heroImageId},requestPreview:true,clientVersion:"2.0"};
-  }
-
-  function startProgress(){
-    const stages=language==="zh"?["正在创建网站","正在准备内容","正在组合页面","正在打开预览"]:["Creating your website","Preparing content","Building the page","Opening the preview"];
-    let index=0;progressValue=8;byId("progress-bar").style.width=`${progressValue}%`;byId("progress-text").textContent=stages[0];
-    progressTimer=setInterval(()=>{progressValue=Math.min(90,progressValue+Math.max(2,Math.round((92-progressValue)*.09)));byId("progress-bar").style.width=`${progressValue}%`;if(progressValue>28)index=1;if(progressValue>52)index=2;if(progressValue>74)index=3;byId("progress-text").textContent=stages[index];},650);
-  }
-  function stopProgress(){if(progressTimer)clearInterval(progressTimer);progressTimer=null;}
-  function waitForFrame(frame,timeout=20000){return new Promise(resolve=>{let done=false;const finish=()=>{if(done)return;done=true;clearTimeout(timer);frame.removeEventListener("load",finish);resolve()};const timer=setTimeout(finish,timeout);frame.addEventListener("load",finish,{once:true})})}
-
-  async function handleGenerate(event){
-    event.preventDefault();if(generating)return;const name=value("name");if(!name){byId("name")?.focus();return setMessage("create-message",t("请填写商家名称","Enter a business name"),"error")}
-    generating=true;setMessage("create-message");setBusy(byId("generate"),true,t("正在生成…","Creating…"));showView("building-view");startProgress();
+  const state = { lang: 'en', siteId: '', previewUrl: '', siteName: '', busy: false, files: [] };
+  const copy = {
+    en:{manage:'Manage',eyebrow:'Create your business website',title:'Describe your business.<br>See your website.',lead:'A name and a short description are enough to begin.',promptPlaceholder:'Example: A modern website for a Los Angeles custom cabinet company',images:'Images',details:'Add business details',businessName:'Business name',industry:'Industry',city:'City / service area',contact:'Phone or email',services:'Services or products',about:'About your business',generate:'Generate website',creating:'Creating your website',edit:'Edit',share:'Share',publish:'Publish',choosePlan:'Choose how to publish'},
+    zh:{manage:'会员管理',eyebrow:'创建你的商家网站',title:'说出你的业务。<br>立即看到网站。',lead:'商家名称和一句描述就可以开始。',promptPlaceholder:'例如：为洛杉矶一家定制橱柜公司创建高级现代网站',images:'图片',details:'添加商家资料',businessName:'商家名称',industry:'行业',city:'城市 / 服务地区',contact:'电话或邮箱',services:'服务或产品',about:'商家介绍',generate:'立即生成网站',creating:'正在创建网站',edit:'修改',share:'分享',publish:'发布',choosePlan:'选择发布方式'}
+  };
+  function setLang(lang){ state.lang=lang; document.documentElement.lang=lang==='zh'?'zh-CN':'en'; document.querySelectorAll('[data-i18n]').forEach(el=>{const key=el.dataset.i18n;if(copy[lang][key]) el.innerHTML=copy[lang][key]}); document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{el.placeholder=copy[lang][el.dataset.i18nPlaceholder]||''}); $('languageBtn').textContent=lang==='en'?'中文':'English'; }
+  function id(){ return `sjw_${crypto.getRandomValues(new Uint32Array(4)).reduce((s,n)=>s+n.toString(36),'').slice(0,24)}`; }
+  function show(name){ ['createView','workspace','loadingView'].forEach(x=>$(x).hidden=x!==name); }
+  function message(text=''){ $('formMessage').textContent=text; }
+  function inferName(prompt){ const line=String(prompt||'').trim().split(/[.!?。！？\n]/)[0]; return line.slice(0,60)||'Business Website'; }
+  async function uploadFiles(){ const ids=[]; for(const file of state.files.slice(0,6)){ const result=await api.upload(file); if(result.assetId) ids.push(result.assetId); } return ids; }
+  async function generate(){
+    if(state.busy)return; const prompt=$('promptInput').value.trim(); const name=$('businessName').value.trim()||inferName(prompt); if(!prompt&&!name){message(state.lang==='zh'?'请输入商家名称或简单描述。':'Enter a business name or short description.');return;}
+    state.busy=true; message(''); show('loadingView'); let progress=12; $('progressBar').style.width=`${progress}%`; const texts=state.lang==='zh'?['理解商家需求…','整理页面内容…','匹配视觉风格…','生成网站预览…']:['Understanding your business…','Shaping the content…','Matching the visual direction…','Preparing your preview…']; let i=0; $('loadingText').textContent=texts[0]; const timer=setInterval(()=>{progress=Math.min(progress+Math.random()*12,88);$('progressBar').style.width=`${progress}%`;i=Math.min(i+1,texts.length-1);$('loadingText').textContent=texts[i]},900);
     try{
-      const heroImageId=await uploadImage();
-      const result=await api.generateSite(payload(heroImageId));
-      const previewUrl=result.previewUrl||result.url||"";if(!previewUrl||!isAllowedPreview(previewUrl))throw new Error(t("暂时无法显示预览","Preview is unavailable"));
-      currentResult={...result,previewUrl};const frame=byId("preview");frame.src=`${previewUrl}${previewUrl.includes("?")?"&":"?"}t=${Date.now()}`;
-      byId("progress-bar").style.width="100%";byId("progress-text").textContent=t("网站已经准备好","Your website is ready");
-      await waitForFrame(frame);byId("site-url").textContent=previewUrl;byId("share-site").disabled=false;byId("use-site").disabled=!result.siteId;showView("preview-view");
-    }catch(error){showView("create-view");setMessage("create-message",error.message||t("暂时无法生成，请稍后重试","Unable to generate. Please try again."),"error")}
-    finally{stopProgress();setBusy(byId("generate"),false);generating=false}
+      const assetIds=await uploadFiles(); state.siteId=id(); state.siteName=name;
+      const payload={siteId:state.siteId,prompt,business:{name,industry:$('industry').value.trim(),city:$('city').value.trim(),contact:$('contact').value.trim(),description:$('description').value.trim(),services:$('services').value.trim(),language:state.lang},assets:{imageIds:assetIds,heroImageId:assetIds[0]||''}};
+      const result=await api.generate(payload); state.previewUrl=result.previewUrl||result.url; if(!state.previewUrl)throw new Error('Preview unavailable'); clearInterval(timer);$('progressBar').style.width='100%'; $('workspaceName').textContent=state.siteName; $('previewAddress').textContent=state.previewUrl; $('previewFrame').src=state.previewUrl; setTimeout(()=>show('workspace'),500);
+    }catch(error){clearInterval(timer);show('createView');message(error.name==='AbortError'?'Request timed out. Please try again.':error.message||'Unable to generate website.');}finally{state.busy=false;}
   }
-
-  async function checkout(plan){if(checkoutBusy)return;const email=value("checkout-email");if(!email||!currentResult?.siteId)return setMessage("checkout-message",t("请输入邮箱并先生成网站","Enter your email and generate a website first"),"error");checkoutBusy=true;const button=plan==="yearly"?byId("checkout-yearly"):byId("checkout-monthly");setBusy(button,true,t("正在打开…","Opening…"));try{const result=await api.createCheckoutSession({plan,email,siteId:currentResult.siteId,siteName:value("name"),returnUrl:`${String(cfg.siteUrl||location.origin).replace(/\/$/,"")}/`});location.assign(validateStripeUrl(result.url))}catch(error){setMessage("checkout-message",error.message,"error")}finally{setBusy(button,false);checkoutBusy=false}}
-  async function openPortal(){if(portalBusy)return;const email=value("billing-email");if(!email)return setMessage("billing-message",t("请输入付款邮箱","Enter your payment email"),"error");portalBusy=true;const button=byId("open-portal");setBusy(button,true,t("正在打开…","Opening…"));try{const result=await api.createPortalSession({email,returnUrl:`${String(cfg.siteUrl||location.origin).replace(/\/$/,"")}/`});location.assign(validateStripeUrl(result.url))}catch(error){setMessage("billing-message",error.message,"error")}finally{setBusy(button,false);portalBusy=false}}
-
-  byId("site-form")?.addEventListener("submit",handleGenerate);
-  byId("language-toggle")?.addEventListener("click",()=>{language=language==="zh"?"en":"zh";applyLanguage()});
-  byId("more-toggle")?.addEventListener("click",()=>{const box=byId("more-fields");const open=box.hidden;box.hidden=!open;byId("more-toggle").setAttribute("aria-expanded",String(open));byId("more-toggle").querySelector("b").textContent=open?"−":"＋"});
-  byId("hero-image")?.addEventListener("change",()=>{const file=byId("hero-image")?.files?.[0];byId("hero-image-state").textContent=file?file.name:t("可选","Optional")});
-  byId("edit-site")?.addEventListener("click",()=>showView("create-view"));
-  byId("share-site")?.addEventListener("click",async()=>{if(!currentResult?.previewUrl)return;try{if(navigator.share)await navigator.share({title:value("name"),url:currentResult.previewUrl});else{await navigator.clipboard.writeText(currentResult.previewUrl);alert(t("链接已复制","Link copied"))}}catch{}});
-  byId("use-site")?.addEventListener("click",()=>byId("upgrade-dialog")?.showModal());
-  byId("manage-billing")?.addEventListener("click",()=>byId("billing-dialog")?.showModal());
-  byId("checkout-monthly")?.addEventListener("click",()=>checkout("monthly"));byId("checkout-yearly")?.addEventListener("click",()=>checkout("yearly"));byId("open-portal")?.addEventListener("click",openPortal);
-  document.querySelectorAll("[data-close]").forEach(button=>button.addEventListener("click",()=>byId(button.dataset.close)?.close()));
-  applyLanguage();
+  async function checkout(plan){ const email=$('billingEmail').value.trim(); if(!email){$('dialogMessage').textContent='Enter your email.';return;} try{ const result=await api.checkout({plan,email,siteId:state.siteId,siteName:state.siteName,returnUrl:cfg.siteUrl}); const url=new URL(result.url); if(!['checkout.stripe.com','billing.stripe.com'].includes(url.hostname))throw new Error('Invalid payment link'); location.href=url.href; }catch(e){$('dialogMessage').textContent=e.message;}}
+  $('createForm').addEventListener('submit',e=>{e.preventDefault();generate()});
+  $('detailsToggle').addEventListener('click',()=>{const open=$('detailsPanel').hidden;$('detailsPanel').hidden=!open;$('detailsToggle').setAttribute('aria-expanded',String(open))});
+  document.querySelectorAll('.chips button').forEach(btn=>btn.addEventListener('click',()=>{$('promptInput').value=btn.dataset.prompt;$('promptInput').focus()}));
+  $('imageInput').addEventListener('change',e=>{state.files=[...e.target.files].filter(f=>['image/jpeg','image/png','image/webp'].includes(f.type)&&f.size<=8*1024*1024).slice(0,6);$('imageCount').textContent=state.files.length?`${state.files.length} selected`:''});
+  $('languageBtn').addEventListener('click',()=>setLang(state.lang==='en'?'zh':'en'));
+  $('backBtn').addEventListener('click',()=>show('createView')); $('editBtn').addEventListener('click',()=>show('createView'));
+  $('shareBtn').addEventListener('click',async()=>{if(!state.previewUrl)return;try{if(navigator.share)await navigator.share({title:state.siteName,url:state.previewUrl});else{await navigator.clipboard.writeText(state.previewUrl);$('workspaceStatus').textContent='Link copied';}}catch{}});
+  $('publishBtn').addEventListener('click',()=>$('publishDialog').showModal()); $('freePublishBtn').addEventListener('click',()=>{window.open(state.previewUrl,'_blank','noopener');$('publishDialog').close()}); $('monthlyBtn').addEventListener('click',()=>checkout('monthly')); $('yearlyBtn').addEventListener('click',()=>checkout('yearly'));
+  document.querySelectorAll('[data-device]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-device]').forEach(x=>x.classList.remove('active'));btn.classList.add('active');$('browserFrame').className=`browser-frame ${btn.dataset.device}`}));
+  $('manageBtn').addEventListener('click',async()=>{const email=prompt(state.lang==='zh'?'请输入会员邮箱':'Enter membership email');if(!email)return;try{const result=await api.portal({email,returnUrl:cfg.siteUrl});location.href=result.url}catch(e){alert(e.message)}});
+  const qs=new URLSearchParams(location.search); if(qs.get('checkout')==='success') $('formMessage').textContent='Membership activated.'; setLang('en');
 })();

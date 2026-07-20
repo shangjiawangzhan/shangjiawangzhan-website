@@ -1,45 +1,19 @@
 (() => {
-  "use strict";
-  const cfg = window.SJW_CONFIG || {};
-  const API = String(cfg.apiBase || "").replace(/\/$/, "");
-
-  async function request(path, options = {}, timeoutMs = 15000) {
-    if (!API) throw new Error("Service unavailable");
+  const cfg = window.SJW_CONFIG;
+  async function request(path, options = {}, timeout = 90000) {
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    const timer = setTimeout(() => controller.abort(), timeout);
     try {
-      const response = await fetch(`${API}${path}`, {
-        credentials: "omit",
-        cache: "no-store",
-        ...options,
-        signal: controller.signal,
-        headers: {
-          Accept: "application/json",
-          ...(options.body instanceof FormData ? {} : { "Content-Type": "application/json" }),
-          ...(options.headers || {})
-        }
-      });
-      let data = {};
-      try { data = await response.json(); } catch (_) {}
-      if (!response.ok) throw new Error(data.message || data.error || `Request failed (${response.status})`);
+      const res = await fetch(`${cfg.apiBase}${path}`, { ...options, signal: controller.signal });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Request failed');
       return data;
-    } catch (error) {
-      if (error && error.name === "AbortError") throw new Error("Request timed out");
-      throw error;
     } finally { clearTimeout(timer); }
   }
-
-  function uploadAsset(file) {
-    const form = new FormData();
-    form.append("file", file);
-    form.append("purpose", "hero");
-    return request("/api/uploads", { method: "POST", body: form }, cfg.uploadTimeoutMs || 60000);
-  }
-
-  window.SJW_API = Object.freeze({
-    uploadAsset,
-    generateSite: payload => request("/api/generate-site", { method: "POST", body: JSON.stringify(payload) }, cfg.generationTimeoutMs || 90000),
-    createCheckoutSession: payload => request("/api/create-checkout-session", { method: "POST", body: JSON.stringify(payload) }),
-    createPortalSession: payload => request("/api/create-portal-session", { method: "POST", body: JSON.stringify(payload) })
-  });
+  window.SJW_API = {
+    upload(file) { const body = new FormData(); body.append('file', file); return request('/api/uploads', { method: 'POST', body }, 90000); },
+    generate(payload) { return request('/api/generate-site', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }, 120000); },
+    checkout(payload) { return request('/api/create-checkout-session', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }, 45000); },
+    portal(payload) { return request('/api/create-portal-session', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }, 45000); }
+  };
 })();

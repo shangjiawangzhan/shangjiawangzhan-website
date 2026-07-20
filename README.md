@@ -1,7 +1,5 @@
 # Business Website
 
-Create, preview, and share a professional business website.
+Create, preview, share, and publish a polished business website.
 
-Official website: https://shangjiawangzhan.com
-
-© 2026 Business Website
+https://shangjiawangzhan.com

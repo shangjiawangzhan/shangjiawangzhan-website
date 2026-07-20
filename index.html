@@ -3,67 +3,101 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>Business Website — Create instantly</title>
-  <meta name="description" content="Create and share a professional business website in minutes.">
-  <meta name="theme-color" content="#f7f8fa">
-  <meta name="application-version" content="2.0">
-  <link rel="canonical" href="https://shangjiawangzhan.com/">
+  <meta name="theme-color" content="#0b1020">
+  <title>Business Website</title>
+  <meta name="description" content="Create a polished business website in minutes.">
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="assets/css/app.css?v=2.0">
 </head>
 <body>
-<header class="topbar">
-  <a class="brand" href="/" aria-label="Business Website"><span>商</span><b data-en="Business Website" data-zh="商家网站">Business Website</b></a>
-  <div class="top-actions"><button id="language-toggle" class="quiet" type="button">中文</button><button id="manage-billing" class="quiet" type="button" data-en="Account" data-zh="会员">Account</button></div>
-</header>
-
-<main>
-  <section id="create-view" class="screen create-screen">
-    <div class="hero-copy">
-      <div class="status-dot"><i></i><span data-en="Ready to create" data-zh="立即创建">Ready to create</span></div>
-      <h1 data-en="Your business website, ready in minutes." data-zh="几分钟生成你的商家网站。">Your business website, ready in minutes.</h1>
-      <p data-en="Add the basics. See the full website before you pay." data-zh="填写最少信息，付款前先看完整网站。">Add the basics. See the full website before you pay.</p>
-    </div>
-
-    <form id="site-form" class="app-card" novalidate>
-      <div class="field hero-field"><label for="name" data-en="Business name" data-zh="商家名称">Business name</label><input id="name" autocomplete="organization" maxlength="100" required placeholder="Nova Cabinetry" data-placeholder-en="Nova Cabinetry" data-placeholder-zh="例如：新雅橱柜"></div>
-
-      <fieldset><legend data-en="Business category" data-zh="行业类别">Business category</legend><div id="industry-options" class="category-grid" role="radiogroup"></div></fieldset>
-
-      <div class="field"><label for="location" data-en="City or service area" data-zh="城市或服务地区">City or service area</label><input id="location" maxlength="120" autocomplete="address-level2" placeholder="Los Angeles" data-placeholder-en="Los Angeles" data-placeholder-zh="例如：洛杉矶"></div>
-
-      <div class="field"><label for="contact" data-en="Public contact" data-zh="公开联系方式">Public contact</label><input id="contact" maxlength="160" autocomplete="tel" placeholder="Phone or email" data-placeholder-en="Phone or email" data-placeholder-zh="电话或邮箱"></div>
-
-      <button id="more-toggle" class="details-toggle" type="button" aria-expanded="false"><span data-en="Add more details" data-zh="添加更多信息">Add more details</span><b>＋</b></button>
-      <div id="more-fields" class="extra-fields" hidden>
-        <div class="field"><label for="industry" data-en="Specific business" data-zh="具体业务">Specific business</label><input id="industry" maxlength="120" placeholder="Custom cabinetry" data-placeholder-en="Custom cabinetry" data-placeholder-zh="例如：定制橱柜"></div>
-        <div class="field"><label for="description" data-en="About the business" data-zh="商家介绍">About the business</label><textarea id="description" maxlength="700" rows="3" placeholder="Optional" data-placeholder-en="Optional" data-placeholder-zh="可选"></textarea></div>
-        <div class="field"><label for="services" data-en="Products or services" data-zh="产品或服务">Products or services</label><textarea id="services" maxlength="500" rows="3" placeholder="Design, installation, repair" data-placeholder-en="Design, installation, repair" data-placeholder-zh="设计、安装、维修"></textarea></div>
-        <div class="field"><label for="service-area" data-en="Additional service areas" data-zh="其他服务地区">Additional service areas</label><input id="service-area" maxlength="180" placeholder="Greater Los Angeles" data-placeholder-en="Greater Los Angeles" data-placeholder-zh="大洛杉矶地区"></div>
-        <input id="hero-image" type="file" accept="image/jpeg,image/png,image/webp" hidden>
-        <label for="hero-image" class="photo-upload"><span>＋</span><div><strong data-en="Add a business photo" data-zh="添加商家图片">Add a business photo</strong><small id="hero-image-state" data-en="Optional · JPG, PNG or WebP" data-zh="可选 · JPG、PNG 或 WebP">Optional · JPG, PNG or WebP</small></div></label>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="logo" href="/" aria-label="Business Website home"><span>商</span><strong>Business Website</strong></a>
+      <div class="top-actions">
+        <button class="link-button" id="languageBtn" type="button">中文</button>
+        <button class="link-button" id="manageBtn" type="button" data-i18n="manage">Manage</button>
       </div>
+    </header>
 
-      <button id="generate" class="primary-action" type="submit"><span data-en="Create website" data-zh="立即生成">Create website</span><b>→</b></button>
-      <p id="create-message" class="message" role="status" aria-live="polite"></p>
+    <main>
+      <section class="create-view" id="createView">
+        <div class="create-card">
+          <p class="eyebrow" data-i18n="eyebrow">Create your business website</p>
+          <h1 data-i18n="title">Describe your business.<br>See your website.</h1>
+          <p class="lead" data-i18n="lead">A name and a short description are enough to begin.</p>
+
+          <form id="createForm" novalidate>
+            <label class="prompt-box" for="promptInput">
+              <textarea id="promptInput" rows="4" maxlength="900" data-i18n-placeholder="promptPlaceholder" placeholder="Example: A modern website for a Los Angeles custom cabinet company"></textarea>
+              <div class="prompt-tools">
+                <label class="icon-action" for="imageInput" title="Add images">
+                  <input id="imageInput" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>
+                  <span>＋</span><em data-i18n="images">Images</em>
+                </label>
+                <span class="image-count" id="imageCount"></span>
+              </div>
+            </label>
+
+            <div class="chips" aria-label="Examples">
+              <button type="button" data-prompt="A warm neighborhood restaurant with online reservations">Restaurant</button>
+              <button type="button" data-prompt="A premium home remodeling and custom cabinetry company">Home Services</button>
+              <button type="button" data-prompt="A refined beauty salon with appointment booking">Beauty</button>
+              <button type="button" data-prompt="A trusted professional consulting business">Professional</button>
+              <button type="button" data-prompt="A modern retail store with product highlights">Retail</button>
+            </div>
+
+            <button class="details-toggle" id="detailsToggle" type="button" aria-expanded="false">
+              <span data-i18n="details">Add business details</span><b>⌄</b>
+            </button>
+
+            <div class="details-panel" id="detailsPanel" hidden>
+              <div class="field-grid">
+                <label><span data-i18n="businessName">Business name</span><input id="businessName" maxlength="100" autocomplete="organization"></label>
+                <label><span data-i18n="industry">Industry</span><input id="industry" maxlength="100" autocomplete="off"></label>
+                <label><span data-i18n="city">City / service area</span><input id="city" maxlength="120" autocomplete="address-level2"></label>
+                <label><span data-i18n="contact">Phone or email</span><input id="contact" maxlength="160" autocomplete="email"></label>
+              </div>
+              <label><span data-i18n="services">Services or products</span><textarea id="services" rows="3" maxlength="700"></textarea></label>
+              <label><span data-i18n="about">About your business</span><textarea id="description" rows="4" maxlength="1000"></textarea></label>
+            </div>
+
+            <button class="generate-button" id="generateBtn" type="submit"><span data-i18n="generate">Generate website</span><b>↗</b></button>
+            <p class="form-message" id="formMessage" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+
+      <section class="workspace" id="workspace" hidden>
+        <div class="workspace-bar">
+          <div class="workspace-left"><button class="circle-btn" id="backBtn" type="button" aria-label="Back">←</button><div><strong id="workspaceName">Website</strong><small id="workspaceStatus">Preview ready</small></div></div>
+          <div class="device-switch" role="group" aria-label="Preview size"><button class="active" data-device="desktop">Desktop</button><button data-device="mobile">Mobile</button></div>
+          <div class="workspace-actions"><button id="editBtn" type="button" data-i18n="edit">Edit</button><button id="shareBtn" type="button" data-i18n="share">Share</button><button class="primary-small" id="publishBtn" type="button" data-i18n="publish">Publish</button></div>
+        </div>
+        <div class="preview-stage" id="previewStage"><div class="browser-frame desktop" id="browserFrame"><div class="browser-chrome"><i></i><i></i><i></i><span id="previewAddress">Preview</span></div><iframe id="previewFrame" title="Website preview" sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox" referrerpolicy="no-referrer"></iframe></div></div>
+      </section>
+
+      <section class="loading-view" id="loadingView" hidden>
+        <div class="loading-card"><div class="orb"></div><h2 data-i18n="creating">Creating your website</h2><p id="loadingText">Preparing the design…</p><div class="progress"><span id="progressBar"></span></div></div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="publishDialog">
+    <form method="dialog" class="dialog-card">
+      <button class="dialog-close" value="cancel" aria-label="Close">×</button>
+      <p class="eyebrow">Publish</p><h2 data-i18n="choosePlan">Choose how to publish</h2>
+      <div class="plans">
+        <article><span>Free</span><strong>$0</strong><p>Platform link · Shareable website · Platform badge</p><button id="freePublishBtn" type="button">Use free website</button></article>
+        <article class="featured"><span>Monthly</span><strong>$15<small>/month</small></strong><p>Custom domain · Independent branding · Ongoing updates</p><button id="monthlyBtn" type="button">Choose monthly</button></article>
+        <article><span>Yearly</span><strong>$149<small>/year</small></strong><p>Same features · Save $31 per year</p><button id="yearlyBtn" type="button">Choose yearly</button></article>
+      </div>
+      <label class="email-row"><span>Email</span><input id="billingEmail" type="email" autocomplete="email" placeholder="you@example.com"></label>
+      <p class="dialog-message" id="dialogMessage"></p>
     </form>
-  </section>
+  </dialog>
 
-  <section id="building-view" class="screen building-screen" hidden>
-    <div class="loader-mark"><span></span></div><h2 id="progress-text">Creating your website</h2><div class="progress"><i id="progress-bar"></i></div><p id="progress-detail" data-en="Almost ready" data-zh="马上就好">Almost ready</p>
-  </section>
-
-  <section id="preview-view" class="screen preview-screen" hidden>
-    <div class="preview-toolbar"><div><span class="eyebrow" data-en="Your website" data-zh="你的网站">Your website</span><h2 data-en="Ready to share" data-zh="已经可以分享">Ready to share</h2></div><div class="toolbar-actions"><button id="edit-site" type="button" data-en="Edit" data-zh="修改">Edit</button><button id="share-site" type="button" disabled data-en="Share" data-zh="分享">Share</button><button id="use-site" class="dark" type="button" disabled data-en="Use your domain" data-zh="使用独立域名">Use your domain</button></div></div>
-    <div class="browser"><div class="browser-bar"><i></i><i></i><i></i><code id="site-url"></code></div><iframe id="preview" title="Website preview" sandbox="allow-same-origin allow-forms allow-popups allow-top-navigation-by-user-activation" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
-    <p class="free-note" data-en="Free websites can be shared immediately and include a small platform link." data-zh="免费网站可立即分享，并保留小型平台入口。">Free websites can be shared immediately and include a small platform link.</p>
-  </section>
-</main>
-
-<footer><span>© 2026 Business Website</span><nav><a href="pages/privacy.html" data-en="Privacy" data-zh="隐私">Privacy</a><a href="pages/terms.html" data-en="Terms" data-zh="条款">Terms</a><a href="pages/report.html" data-en="Contact" data-zh="联系">Contact</a></nav></footer>
-
-<dialog id="upgrade-dialog"><div class="modal"><button class="close" type="button" data-close="upgrade-dialog">×</button><span class="eyebrow" data-en="Publish independently" data-zh="独立发布">Publish independently</span><h2 data-en="Choose billing" data-zh="选择付款方式">Choose billing</h2><div class="plans"><button id="checkout-monthly" class="plan" type="button"><span><b data-en="Monthly" data-zh="月付">Monthly</b><small data-en="Same member features" data-zh="完整会员功能">Same member features</small></span><strong>$15<small>/mo</small></strong></button><button id="checkout-yearly" class="plan featured" type="button"><span><b data-en="Yearly" data-zh="年付">Yearly</b><small data-en="Save $31 per year" data-zh="每年节省 $31">Save $31 per year</small></span><strong>$149<small>/yr</small></strong></button></div><input id="checkout-email" type="email" autocomplete="email" placeholder="you@example.com"><p id="checkout-message" class="message"></p></div></dialog>
-<dialog id="billing-dialog"><div class="modal"><button class="close" type="button" data-close="billing-dialog">×</button><span class="eyebrow" data-en="Account" data-zh="会员">Account</span><h2 data-en="Manage your plan" data-zh="管理网站服务">Manage your plan</h2><input id="billing-email" type="email" autocomplete="email" placeholder="you@example.com"><button id="open-portal" class="primary-action" type="button" data-en="Continue" data-zh="继续">Continue</button><p id="billing-message" class="message"></p></div></dialog>
-
-<script src="assets/js/config.js?v=2.0" defer></script><script src="assets/js/api.js?v=2.0" defer></script><script src="assets/js/app.js?v=2.0" defer></script>
-</body></html>
+  <script src="assets/js/config.js?v=2.0"></script>
+  <script src="assets/js/api.js?v=2.0"></script>
+  <script src="assets/js/app.js?v=2.0"></script>
+</body>
+</html>

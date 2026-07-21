@@ -1,24 +1,23 @@
-# Business Website Frontend v3.1 Launch Edition
+# Business Website Frontend v3.2 Auth Final
 
-This is the first payment-ready launch edition.
+Public release name: **Business Website v1.0**
 
-## Business information added
-- primary city, state and country
-- multiple service areas
-- separate phone and email
-- business hours
-- optional physical address
-- verified trust information
-- official profile URLs
-- clear warning against invented claims
+## Authentication
+- Continue with Google
+- Email Magic Link
+- no platform password form
+- Supabase session persistence
+- second free generation requires authenticated account
+- subscription management requires authenticated ownership
 
-## Generated website improvements
-- service-first hero title
-- local service-area section
-- industry-specific service descriptions
-- separate contact actions
-- FAQ section
-- structured LocalBusiness/Service/FAQ data
-- stronger title, description, canonical and social metadata
+## Language
+The optional business-information form and account dialog now follow the selected Chinese or English interface.
 
-Payment endpoints, Stripe architecture, Render backend and production domains remain unchanged.
+## Billing
+Four exact plan actions:
+- Business Monthly — $99/month
+- Business Annual — $990/year
+- Business Pro Monthly — $199/month
+- Business Pro Annual — $1,990/year
+
+Deploy only after the backend Supabase environment variables and provider settings are complete.

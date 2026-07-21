@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0a0d12"><title>Business Website</title><meta name="description" content="Create a polished business website from one simple description."><link rel="manifest" href="manifest.json"><link rel="stylesheet" href="assets/css/app.css?v=3.1.0"><link rel="apple-touch-icon" href="icons/icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0a0d12"><title>Business Website</title><meta name="description" content="Create a polished business website from one simple description."><link rel="manifest" href="manifest.json"><link rel="stylesheet" href="assets/css/app.css?v=3.2.0"><link rel="apple-touch-icon" href="icons/icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"></head><body>
 <div class="app">
 <header class="top"><a class="brand" href="/" aria-label="Home"><span>商</span><b>Business Website</b></a><div class="top-actions"><button id="installBtn" class="quiet" hidden>Install</button><button id="langBtn" class="quiet">中文</button><button id="accountBtn" class="quiet">Sign in</button><button id="manageBtn" class="quiet">Manage</button></div></header>
 <main>
@@ -22,30 +22,46 @@
   <div class="stage"><div id="frameShell" class="frame-shell desktop"><div id="generatingOverlay" class="generating-overlay" hidden><div class="site-skeleton"><div class="sk-nav"></div><div class="sk-hero"><span></span><span></span><span></span></div><div class="sk-cards"><i></i><i></i><i></i></div></div><div class="generation-status"><strong id="loadingText">Creating your website…</strong><span id="elapsedText">0s</span><div class="line"><span id="progress"></span></div></div></div><iframe id="preview" title="Website preview" sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation" referrerpolicy="no-referrer"></iframe></div></div>
 </section>
 </main></div>
-<dialog id="detailsDialog"><form method="dialog" class="sheet details-sheet"><header><div><small>Business information</small><h2>Improve local visibility</h2></div><button value="cancel">×</button></header><div class="fields">
-<label>Business name<input id="businessName" maxlength="100" autocomplete="organization"></label>
-<label>Industry<input id="industry" maxlength="100" placeholder="Example: Custom blinds"></label>
-<label>Primary city<input id="city" maxlength="100" autocomplete="address-level2"></label>
-<label>State / region<input id="state" maxlength="100" autocomplete="address-level1"></label>
-<label>Country<input id="country" maxlength="100" autocomplete="country-name" value="United States"></label>
-<label>Phone<input id="phone" maxlength="60" autocomplete="tel"></label>
-<label>Email<input id="email" maxlength="254" type="email" autocomplete="email"></label>
-<label>Business hours<input id="hours" maxlength="300" placeholder="Mon–Fri 9:00 AM–5:00 PM"></label>
-<label class="wide">Service areas<textarea id="serviceAreas" rows="2" maxlength="800" placeholder="Alhambra, San Gabriel, Monterey Park, Greater Los Angeles"></textarea></label>
-<label class="wide">Services or products<textarea id="services" rows="3" maxlength="1000" placeholder="One service per line or separated by commas"></textarea></label>
-<label class="wide">About your business<textarea id="description" rows="4" maxlength="1200" placeholder="Only include real, customer-facing information"></textarea></label>
-<label class="wide">Verified trust information<textarea id="trust" rows="2" maxlength="600" placeholder="Example: Free estimate, bilingual service, residential and commercial. Do not add licenses or insurance unless true."></textarea></label>
-<label class="wide check-row"><input id="physicalLocation" type="checkbox"> Show a physical business address</label>
-<label class="wide" id="addressLabel" hidden>Business address<input id="address" maxlength="260" autocomplete="street-address"></label>
-<label class="wide">Official profiles (optional)<textarea id="sameAs" rows="2" maxlength="1000" placeholder="Google Business Profile, Yelp, LinkedIn or other official URLs"></textarea></label>
-</div><p class="form-note">Only publish information the business has confirmed. The platform does not invent licenses, ratings, years in business, prices or guarantees.</p><button class="save" value="default">Save details</button></form></dialog>
-<dialog id="publishDialog"><form method="dialog" class="sheet publish-sheet"><header><div><small>Publish</small><h2>Continue with a plan</h2></div><button value="cancel">×</button></header><p class="plan-intro">Your preview is ready to share. Subscribe when you want to keep creating, remove the platform badge, and use your own domain.</p><div class="plans"><article class="featured"><span>Business</span><strong>$99<small>/month</small></strong><p>One professional business website, custom domain, continued updates, and independent branding.</p><button id="monthlyBtn" type="button">Choose Business</button><small class="annual-note">$990/year available</small></article><article><span>Business Pro</span><strong>$199<small>/month</small></strong><p>Advanced business presentation, bilingual support, more sites and priority capabilities.</p><button id="yearlyBtn" type="button">Choose Pro</button><small class="annual-note">$1,990/year available</small></article></div><button id="continuePreviewBtn" class="continue-preview" type="button">Continue with current preview</button><p id="publishMessage" class="message"></p></form></dialog>
-<dialog id="limitDialog"><form method="dialog" class="sheet limit-sheet"><header><div><small>Free trial complete</small><h2>Continue creating</h2></div><button value="cancel">×</button></header><p>Your two free website creations have been used. Subscribe to continue creating and updating websites.</p><div class="limit-actions"><button id="limitMonthly" type="button">Business · $99/month</button><button id="limitYearly" class="primary" type="button">Business Pro · $199/month</button></div><p id="limitMessage" class="message"></p></form></dialog>
+<dialog id="detailsDialog"><form method="dialog" class="sheet details-sheet"><header><div><small id="detailsSmall">Business information</small><h2 id="detailsTitle">Improve local visibility</h2></div><button value="cancel">×</button></header><div class="fields">
+<label><span id="labelBusinessName">Business name</span><input id="businessName" maxlength="100" autocomplete="organization"></label>
+<label><span id="labelIndustry">Industry</span><input id="industry" maxlength="100" placeholder="Example: Custom blinds"></label>
+<label><span id="labelCity">Primary city</span><input id="city" maxlength="100" autocomplete="address-level2"></label>
+<label><span id="labelState">State / region</span><input id="state" maxlength="100" autocomplete="address-level1"></label>
+<label><span id="labelCountry">Country</span><input id="country" maxlength="100" autocomplete="country-name" value="United States"></label>
+<label><span id="labelPhone">Phone</span><input id="phone" maxlength="60" autocomplete="tel"></label>
+<label><span id="labelEmail">Email</span><input id="email" maxlength="254" type="email" autocomplete="email"></label>
+<label><span id="labelHours">Business hours</span><input id="hours" maxlength="300" placeholder="Mon–Fri 9:00 AM–5:00 PM"></label>
+<label class="wide"><span id="labelServiceAreas">Service areas</span><textarea id="serviceAreas" rows="2" maxlength="800" placeholder="Alhambra, San Gabriel, Monterey Park, Greater Los Angeles"></textarea></label>
+<label class="wide"><span id="labelServices">Services or products</span><textarea id="services" rows="3" maxlength="1000" placeholder="One service per line or separated by commas"></textarea></label>
+<label class="wide"><span id="labelDescription">About your business</span><textarea id="description" rows="4" maxlength="1200" placeholder="Only include real, customer-facing information"></textarea></label>
+<label class="wide"><span id="labelTrust">Verified trust information</span><textarea id="trust" rows="2" maxlength="600" placeholder="Example: Free estimate, bilingual service, residential and commercial. Do not add licenses or insurance unless true."></textarea></label>
+<label class="wide check-row"><input id="physicalLocation" type="checkbox"><span id="labelPhysical">Show a physical business address</span></label>
+<label class="wide" id="addressLabel" hidden><span id="labelAddress">Business address</span><input id="address" maxlength="260" autocomplete="street-address"></label>
+<label class="wide"><span id="labelProfiles">Official profiles (optional)</span><textarea id="sameAs" rows="2" maxlength="1000" placeholder="Google Business Profile, Yelp, LinkedIn or other official URLs"></textarea></label>
+</div><p id="detailsNote" class="form-note">Only publish information the business has confirmed. The platform does not invent licenses, ratings, years in business, prices or guarantees.</p><button id="saveDetailsBtn" class="save" value="default">Save details</button></form></dialog>
+<dialog id="publishDialog"><form method="dialog" class="sheet publish-sheet"><header><div><small>Publish</small><h2>Continue with a plan</h2></div><button value="cancel">×</button></header><p class="plan-intro">Your preview is ready to share. Subscribe when you want to keep creating, remove the platform badge, and use your own domain.</p><div class="plans four-plans">
+<article class="featured"><span>Business Monthly</span><strong>$99<small>/month</small></strong><p>One professional website, custom domain, updates and independent branding.</p><button id="businessMonthlyBtn" type="button">Choose monthly</button></article>
+<article><span>Business Annual</span><strong>$990<small>/year</small></strong><p>The Business plan billed annually with two months of savings.</p><button id="businessYearlyBtn" type="button">Choose annual</button></article>
+<article><span>Business Pro Monthly</span><strong>$199<small>/month</small></strong><p>Advanced presentation, bilingual support, more sites and priority capabilities.</p><button id="proMonthlyBtn" type="button">Choose Pro monthly</button></article>
+<article><span>Business Pro Annual</span><strong>$1,990<small>/year</small></strong><p>The Pro plan billed annually with annual savings.</p><button id="proYearlyBtn" type="button">Choose Pro annual</button></article>
+</div><button id="continuePreviewBtn" class="continue-preview" type="button">Continue with current preview</button><p id="publishMessage" class="message"></p></form></dialog>
+<dialog id="limitDialog"><form method="dialog" class="sheet limit-sheet"><header><div><small>Free trial complete</small><h2>Continue creating</h2></div><button value="cancel">×</button></header><p>Your two free website creations have been used. Subscribe to continue creating and updating websites.</p><div class="limit-actions four-limit-actions">
+<button id="limitBusinessMonthly" type="button">Business · $99/month</button>
+<button id="limitBusinessYearly" type="button">Business · $990/year</button>
+<button id="limitProMonthly" type="button">Pro · $199/month</button>
+<button id="limitProYearly" class="primary" type="button">Pro · $1,990/year</button>
+</div><p id="limitMessage" class="message"></p></form></dialog>
 
-<dialog id="accountDialog"><form method="dialog" class="sheet account-sheet"><header><div><small>Account</small><h2 id="accountTitle">Sign in</h2></div><button value="cancel">×</button></header>
-<div id="authPanel"><div class="fields"><label class="wide">Email<input id="authEmail" type="email" autocomplete="email"></label><label class="wide">Password<input id="authPassword" type="password" minlength="8" autocomplete="current-password"></label></div>
-<div class="auth-actions"><button id="loginBtn" type="button" class="save">Sign in</button><button id="registerBtn" type="button" class="continue-preview">Create account</button></div><p id="authMessage" class="message"></p></div>
-<div id="accountPanel" hidden><p id="accountEmail" class="account-email"></p><div class="account-grid"><button id="mySitesBtn" type="button">My websites</button><button id="notificationsBtn" type="button">Notifications <span id="notificationCount"></span></button><button id="enableNotificationsBtn" type="button">Enable device notifications</button><button id="logoutBtn" type="button">Sign out</button></div><div id="accountContent" class="account-content"></div></div>
+<dialog id="accountDialog"><form method="dialog" class="sheet account-sheet"><header><div><small id="accountSmall">Account</small><h2 id="accountTitle">Sign in</h2></div><button value="cancel">×</button></header>
+<div id="authPanel">
+  <button id="googleLoginBtn" type="button" class="google-login"><span class="google-mark">G</span><span id="googleLoginText">Continue with Google</span></button>
+  <div class="auth-divider"><span id="authOrText">or</span></div>
+  <label class="magic-label"><span id="magicEmailLabel">Email</span><input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com"></label>
+  <button id="magicLinkBtn" type="button" class="continue-preview">Send sign-in link</button>
+  <p id="authPrivacyText" class="auth-privacy">No password is required. A secure sign-in link will be sent to your email.</p>
+  <p id="authMessage" class="message"></p>
+</div>
+<div id="accountPanel" hidden><p id="accountEmail" class="account-email"></p><div class="account-grid"><button id="mySitesBtn" type="button">My websites</button><button id="notificationsBtn" type="button">Notifications <span id="notificationCount"></span></button><button id="manageSubscriptionBtn" type="button">Manage subscription</button><button id="enableNotificationsBtn" type="button">Enable device notifications</button><button id="logoutBtn" type="button">Sign out</button></div><div id="accountContent" class="account-content"></div></div>
 </form></dialog>
 <dialog id="installDialog"><form method="dialog" class="sheet install-sheet"><header><div><small>Install</small><h2>Add to Home Screen</h2></div><button value="cancel">×</button></header><p>On iPhone or iPad, tap Share, then choose “Add to Home Screen”.</p><button class="save" value="default">Done</button></form></dialog>
 
@@ -78,4 +94,8 @@
     <button id="sendFeedbackBtn" class="save" type="button">Send feedback</button>
   </form>
 </dialog>
-<script src="assets/js/config.js?v=3.1.0"></script><script src="assets/js/api.js?v=3.1.0"></script><script src="assets/js/app.js?v=3.1.0"></script></body></html>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/js/config.js?v=3.2.0"></script>
+<script src="assets/js/auth.js?v=3.2.0"></script>
+<script src="assets/js/api.js?v=3.2.0"></script>
+<script src="assets/js/app.js?v=3.2.0"></script></body></html>

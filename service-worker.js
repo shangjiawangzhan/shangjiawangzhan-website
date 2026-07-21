@@ -1,4 +1,4 @@
-const CACHE='sjw-app-v3.1.0';
+const CACHE='sjw-app-v3.2.0';
 const SHELL=['/','/index.html','/assets/css/app.css?v=2.1.0','/assets/js/config.js?v=2.1.0','/assets/js/api.js?v=2.1.0','/assets/js/app.js?v=2.1.0','/offline.html','/privacy.html','/terms.html','/refund.html','/acceptable-use.html','/icons/icon-192.png','/icons/icon-512.png'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));

@@ -23,3 +23,14 @@ body.preview-mode{overflow:hidden;background:#000}.preview-mode .app{height:100v
 .check-row{display:flex!important;align-items:center;gap:10px;padding:13px 0}
 .check-row input{width:auto!important}.form-note{font-size:12px;line-height:1.55;opacity:.7;margin:14px 0}
 @media(max-width:700px){.details-sheet .fields{grid-template-columns:1fr}}
+
+.google-login{width:100%;min-height:52px;border:1px solid rgba(255,255,255,.18);border-radius:14px;background:#fff;color:#17191c;font:inherit;font-weight:850;display:flex;align-items:center;justify-content:center;gap:12px;cursor:pointer}
+.google-mark{display:grid;place-items:center;width:25px;height:25px;border-radius:50%;border:1px solid #d8dce2;font-weight:900}
+.auth-divider{display:flex;align-items:center;gap:12px;margin:18px 0;color:rgba(255,255,255,.54);font-size:12px}
+.auth-divider:before,.auth-divider:after{content:"";height:1px;flex:1;background:rgba(255,255,255,.13)}
+.magic-label{display:grid;gap:8px;font-size:13px;font-weight:750}
+.magic-label input{width:100%;border:1px solid rgba(255,255,255,.14);border-radius:14px;background:rgba(255,255,255,.06);color:inherit;padding:14px;font:inherit}
+.auth-privacy{font-size:12px;line-height:1.55;opacity:.64}
+.four-plans{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.four-limit-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:700px){.four-plans,.four-limit-actions{grid-template-columns:1fr!important}}

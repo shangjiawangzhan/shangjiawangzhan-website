@@ -1,5 +1,5 @@
 window.SJW_CONFIG=Object.freeze({
-  version:'3.1',
+  version:'3.2',
   siteUrl:'https://shangjiawangzhan.com',
   apiBase:'https://api.shangjiawangzhan.com',
   businessMonthlyDisplay:'$99',

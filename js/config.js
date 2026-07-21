@@ -1,0 +1,9 @@
+window.SJW_CONFIG=Object.freeze({
+  version:'3.0',
+  siteUrl:'https://shangjiawangzhan.com',
+  apiBase:'https://api.shangjiawangzhan.com',
+  businessMonthlyDisplay:'$99',
+  businessYearlyDisplay:'$990',
+  proMonthlyDisplay:'$199',
+  proYearlyDisplay:'$1,990'
+});

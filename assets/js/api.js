@@ -22,5 +22,6 @@ window.SJW_API={
  me:()=>request('/api/me',{timeout:15000}),
  sites:()=>request('/api/account/sites',{timeout:20000}),
  notifications:()=>request('/api/account/notifications',{timeout:15000}),
+ feedback:data=>request('/api/feedback',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),timeout:20000}),
  readNotifications:id=>request('/api/account/notifications/read',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:id||''}),timeout:15000})
 }})();

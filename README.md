@@ -1,16 +1,24 @@
-# Business Website Frontend v2.1
+# Business Website Frontend v3.1 Launch Edition
 
-Application-style frontend with:
-- PWA install / Add to Home Screen
-- bilingual creation flow
-- account sign-in and registration
-- customer website records
-- in-app/device notifications
-- two-generation trial flow
-- Business / Business Pro subscription UI
-- full-screen generated website workspace
+This is the first payment-ready launch edition.
 
-## Production
-API: `https://api.shangjiawangzhan.com`
+## Business information added
+- primary city, state and country
+- multiple service areas
+- separate phone and email
+- business hours
+- optional physical address
+- verified trust information
+- official profile URLs
+- clear warning against invented claims
 
-Before enabling the new paid buttons, create the four Stripe recurring prices and add their Price IDs to Render.
+## Generated website improvements
+- service-first hero title
+- local service-area section
+- industry-specific service descriptions
+- separate contact actions
+- FAQ section
+- structured LocalBusiness/Service/FAQ data
+- stronger title, description, canonical and social metadata
+
+Payment endpoints, Stripe architecture, Render backend and production domains remain unchanged.

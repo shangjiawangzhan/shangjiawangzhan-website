@@ -2,7 +2,7 @@
   "id": "/",
   "name": "Business Website",
   "short_name": "Business Website",
-  "description": "Create and manage a professional business website.",
+  "description": "Create, publish, and manage a professional business website.",
   "start_url": "/?source=pwa",
   "scope": "/",
   "display": "standalone",

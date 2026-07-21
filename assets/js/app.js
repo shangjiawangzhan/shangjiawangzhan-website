@@ -78,20 +78,26 @@
 
   $('images').addEventListener('change',e=>{files=selectedFiles(e.target.files);text('imageCount',files.length?t().selected(files.length):'')});
   document.querySelectorAll('[data-prompt]').forEach(b=>b.onclick=()=>{$('prompt').value=b.dataset.prompt;$('prompt').focus()});
-  $('detailsBtn').onclick=()=>details.showModal();
+  $('detailsBtn').onclick=()=>details.showModal(); $('physicalLocation').onchange=()=>{$('addressLabel').hidden=!$('physicalLocation').checked};
   $('langBtn').onclick=()=>{currentLang=currentLang==='zh'?'en':'zh';applyLanguage()};
 
   async function uploadAll(){const ids=[];for(const file of files){const r=await SJW_API.upload(file);ids.push(r.assetId)}return ids}
   function startProgress(){let p=8,seconds=0,i=0;const lines=t().loading;overlay.hidden=false;text('loadingText',lines[0]);text('elapsedText','0s');$('progress').style.width='8%';const timer=setInterval(()=>{seconds++;text('elapsedText',`${seconds}s`);p=Math.min(90,p+(seconds<5?8:seconds<12?4:1.5));$('progress').style.width=`${p}%`;if(i<lines.length-1&&seconds>=[3,7,13][i]){i++;text('loadingText',lines[i])}},1000);return success=>{clearInterval(timer);$('progress').style.width=success?'100%':`${p}%`;if(success)setTimeout(()=>{overlay.hidden=true},240)}}
   function clearPreviewTimer(){if(previewTimer){clearTimeout(previewTimer);previewTimer=null}}
-  function payloadFromForm(imageIds){return {siteId,prompt:$('prompt').value.trim(),business:{name:$('businessName').value.trim(),industry:$('industry').value.trim(),city:$('city').value.trim(),contact:$('contact').value.trim(),services:$('services').value.trim(),description:$('description').value.trim(),language:currentLang},assets:{heroImageId:imageIds[0]||'',imageIds}}}
+  function payloadFromForm(imageIds){return {siteId,prompt:$('prompt').value.trim(),business:{
+    name:$('businessName').value.trim(),industry:$('industry').value.trim(),city:$('city').value.trim(),
+    state:$('state').value.trim(),country:$('country').value.trim(),serviceAreas:$('serviceAreas').value.trim(),
+    phone:$('phone').value.trim(),email:$('email').value.trim(),hours:$('hours').value.trim(),
+    services:$('services').value.trim(),description:$('description').value.trim(),trust:$('trust').value.trim(),
+    physicalLocation:$('physicalLocation').checked,address:$('address').value.trim(),sameAs:$('sameAs').value.trim(),
+    language:currentLang},assets:{heroImageId:imageIds[0]||'',imageIds}}}
   async function generateWebsite(){
     if(busy)return;const promptValue=$('prompt').value.trim(),name=$('businessName').value.trim();
-    if(!promptValue&&!name){show(create);text('message',t().describeError);$('prompt').focus();return}
+    if(!promptValue&&!name){show(create);text('message',t().describeError);$('prompt').focus();return} if(!name){$('businessName').value=currentLang==='zh'?'我的商家':'My Business'}
     if(trialRemaining<=0){limit.showModal();return}
     busy=true;$('generateBtn').disabled=true;text('message','');show(workspace);preview.onload=null;preview.removeAttribute('src');clearPreviewTimer();const done=startProgress();
     try{if(!siteId)siteId=makeSiteId();const imageIds=await uploadAll();const r=await SJW_API.generate(payloadFromForm(imageIds));previewUrl=validUrl(r.previewUrl);storage.set('sjw_site_id',siteId);let completed=false;const finish=()=>{if(completed)return;completed=true;clearPreviewTimer();done(true);refreshTrial()};preview.onload=finish;previewTimer=setTimeout(()=>{if(completed)return;completed=true;done(false);overlay.hidden=true;busy=false;$('generateBtn').disabled=false;alert(t().previewTimeout);show(create)},30000);preview.src=previewUrl}
-    catch(err){clearPreviewTimer();done(false);overlay.hidden=true;show(create);if(err.code==='TRIAL_LIMIT')limit.showModal();else text('message',err.name==='AbortError'?t().generationTimeout:(err.message||t().unableCreate))}
+    catch(err){clearPreviewTimer();done(false);overlay.hidden=true;show(create);if(err.code==='SIGN_IN_REQUIRED_FOR_SECOND_GENERATION'){show(create);accountDialog.showModal();text('authMessage',currentLang==='zh'?'登录后可使用第二次免费生成。':'Sign in to use your second free generation.')}else if(err.code==='TRIAL_LIMIT')limit.showModal();else text('message',err.name==='AbortError'?t().generationTimeout:(err.message||t().unableCreate))}
     finally{busy=false;$('generateBtn').disabled=false}
   }
 
@@ -144,5 +150,26 @@
   const originalGenerate=generateWebsite;
 
   preview.addEventListener('load',()=>{if('Notification'in window&&Notification.permission==='granted'&&previewUrl){try{new Notification(currentLang==='zh'?'网站已生成':'Website ready',{body:$('businessName').value.trim()||'Business Website',icon:'/icons/icon-192.png'})}catch{}}});
+
+
+  const feedbackDialog=$('feedbackDialog');
+  if($('feedbackBtn')) $('feedbackBtn').onclick=()=>feedbackDialog.showModal();
+  if($('sendFeedbackBtn')) $('sendFeedbackBtn').onclick=async()=>{
+    const message=$('feedbackMessage').value.trim();
+    if(!message){text('feedbackMessageState',currentLang==='zh'?'请填写反馈内容。':'Please enter your feedback.');return}
+    text('feedbackMessageState',currentLang==='zh'?'正在发送…':'Sending…');
+    try{
+      await SJW_API.feedback({
+        category:$('feedbackCategory').value,
+        message,
+        email:$('feedbackEmail').value.trim(),
+        siteId:siteId||'',
+        page:location.href,
+        appVersion:window.SJW_CONFIG.version
+      });
+      text('feedbackMessageState',currentLang==='zh'?'已收到，谢谢你的反馈。':'Received. Thank you for your feedback.');
+      $('feedbackMessage').value='';
+    }catch(e){text('feedbackMessageState',e.message)}
+  };
 
 })();

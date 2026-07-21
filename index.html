@@ -1,9 +1,9 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0a0d12"><title>Business Website</title><meta name="description" content="Create a polished business website from one simple description."><link rel="manifest" href="manifest.json"><link rel="stylesheet" href="assets/css/app.css?v=2.1.0"><link rel="apple-touch-icon" href="icons/icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"></head><body>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0a0d12"><title>Business Website</title><meta name="description" content="Create a polished business website from one simple description."><link rel="manifest" href="manifest.json"><link rel="stylesheet" href="assets/css/app.css?v=3.1.0"><link rel="apple-touch-icon" href="icons/icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"></head><body>
 <div class="app">
 <header class="top"><a class="brand" href="/" aria-label="Home"><span>商</span><b>Business Website</b></a><div class="top-actions"><button id="installBtn" class="quiet" hidden>Install</button><button id="langBtn" class="quiet">中文</button><button id="accountBtn" class="quiet">Sign in</button><button id="manageBtn" class="quiet">Manage</button></div></header>
 <main>
 <section id="createView" class="create-view"><div class="composer">
-<div class="trial" id="trialText">2 free creations</div><h1 id="heroTitle">Describe your business.<br>See your website.</h1>
+<div class="trial" id="trialText">1 preview before sign-in</div><h1 id="heroTitle">Describe your business.<br>See your website.</h1>
 <form id="createForm"><div class="prompt"><textarea id="prompt" maxlength="900" rows="5" placeholder="Example: A premium custom cabinet company in Los Angeles"></textarea><div class="prompt-bar"><label class="attach"><input id="images" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden><span>＋</span><em id="imageLabel">Add images</em></label><span id="imageCount"></span><button id="generateBtn" class="generate" type="submit"><span>Generate</span><b>↗</b></button></div></div>
 <div class="suggestions"><button type="button" data-prompt="A warm neighborhood restaurant with online reservations">Restaurant</button><button type="button" data-prompt="A premium home remodeling and custom cabinetry company">Home services</button><button type="button" data-prompt="A refined beauty salon with appointment booking">Beauty</button><button type="button" data-prompt="A trusted professional consulting business">Professional</button><button type="button" data-prompt="A modern retail store with product highlights">Retail</button></div>
 <button id="detailsBtn" class="details-btn" type="button">＋ Add business details</button><p id="message" class="message"></p>
@@ -22,7 +22,23 @@
   <div class="stage"><div id="frameShell" class="frame-shell desktop"><div id="generatingOverlay" class="generating-overlay" hidden><div class="site-skeleton"><div class="sk-nav"></div><div class="sk-hero"><span></span><span></span><span></span></div><div class="sk-cards"><i></i><i></i><i></i></div></div><div class="generation-status"><strong id="loadingText">Creating your website…</strong><span id="elapsedText">0s</span><div class="line"><span id="progress"></span></div></div></div><iframe id="preview" title="Website preview" sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation" referrerpolicy="no-referrer"></iframe></div></div>
 </section>
 </main></div>
-<dialog id="detailsDialog"><form method="dialog" class="sheet"><header><div><small>Optional</small><h2>Business details</h2></div><button value="cancel">×</button></header><div class="fields"><label>Business name<input id="businessName" maxlength="100" autocomplete="organization"></label><label>Industry<input id="industry" maxlength="100"></label><label>City / service area<input id="city" maxlength="120"></label><label>Phone or email<input id="contact" maxlength="160"></label><label class="wide">Services or products<textarea id="services" rows="3" maxlength="900"></textarea></label><label class="wide">About your business<textarea id="description" rows="4" maxlength="1200"></textarea></label></div><button class="save" value="default">Save details</button></form></dialog>
+<dialog id="detailsDialog"><form method="dialog" class="sheet details-sheet"><header><div><small>Business information</small><h2>Improve local visibility</h2></div><button value="cancel">×</button></header><div class="fields">
+<label>Business name<input id="businessName" maxlength="100" autocomplete="organization"></label>
+<label>Industry<input id="industry" maxlength="100" placeholder="Example: Custom blinds"></label>
+<label>Primary city<input id="city" maxlength="100" autocomplete="address-level2"></label>
+<label>State / region<input id="state" maxlength="100" autocomplete="address-level1"></label>
+<label>Country<input id="country" maxlength="100" autocomplete="country-name" value="United States"></label>
+<label>Phone<input id="phone" maxlength="60" autocomplete="tel"></label>
+<label>Email<input id="email" maxlength="254" type="email" autocomplete="email"></label>
+<label>Business hours<input id="hours" maxlength="300" placeholder="Mon–Fri 9:00 AM–5:00 PM"></label>
+<label class="wide">Service areas<textarea id="serviceAreas" rows="2" maxlength="800" placeholder="Alhambra, San Gabriel, Monterey Park, Greater Los Angeles"></textarea></label>
+<label class="wide">Services or products<textarea id="services" rows="3" maxlength="1000" placeholder="One service per line or separated by commas"></textarea></label>
+<label class="wide">About your business<textarea id="description" rows="4" maxlength="1200" placeholder="Only include real, customer-facing information"></textarea></label>
+<label class="wide">Verified trust information<textarea id="trust" rows="2" maxlength="600" placeholder="Example: Free estimate, bilingual service, residential and commercial. Do not add licenses or insurance unless true."></textarea></label>
+<label class="wide check-row"><input id="physicalLocation" type="checkbox"> Show a physical business address</label>
+<label class="wide" id="addressLabel" hidden>Business address<input id="address" maxlength="260" autocomplete="street-address"></label>
+<label class="wide">Official profiles (optional)<textarea id="sameAs" rows="2" maxlength="1000" placeholder="Google Business Profile, Yelp, LinkedIn or other official URLs"></textarea></label>
+</div><p class="form-note">Only publish information the business has confirmed. The platform does not invent licenses, ratings, years in business, prices or guarantees.</p><button class="save" value="default">Save details</button></form></dialog>
 <dialog id="publishDialog"><form method="dialog" class="sheet publish-sheet"><header><div><small>Publish</small><h2>Continue with a plan</h2></div><button value="cancel">×</button></header><p class="plan-intro">Your preview is ready to share. Subscribe when you want to keep creating, remove the platform badge, and use your own domain.</p><div class="plans"><article class="featured"><span>Business</span><strong>$99<small>/month</small></strong><p>One professional business website, custom domain, continued updates, and independent branding.</p><button id="monthlyBtn" type="button">Choose Business</button><small class="annual-note">$990/year available</small></article><article><span>Business Pro</span><strong>$199<small>/month</small></strong><p>Advanced business presentation, bilingual support, more sites and priority capabilities.</p><button id="yearlyBtn" type="button">Choose Pro</button><small class="annual-note">$1,990/year available</small></article></div><button id="continuePreviewBtn" class="continue-preview" type="button">Continue with current preview</button><p id="publishMessage" class="message"></p></form></dialog>
 <dialog id="limitDialog"><form method="dialog" class="sheet limit-sheet"><header><div><small>Free trial complete</small><h2>Continue creating</h2></div><button value="cancel">×</button></header><p>Your two free website creations have been used. Subscribe to continue creating and updating websites.</p><div class="limit-actions"><button id="limitMonthly" type="button">Business · $99/month</button><button id="limitYearly" class="primary" type="button">Business Pro · $199/month</button></div><p id="limitMessage" class="message"></p></form></dialog>
 
@@ -32,4 +48,34 @@
 <div id="accountPanel" hidden><p id="accountEmail" class="account-email"></p><div class="account-grid"><button id="mySitesBtn" type="button">My websites</button><button id="notificationsBtn" type="button">Notifications <span id="notificationCount"></span></button><button id="enableNotificationsBtn" type="button">Enable device notifications</button><button id="logoutBtn" type="button">Sign out</button></div><div id="accountContent" class="account-content"></div></div>
 </form></dialog>
 <dialog id="installDialog"><form method="dialog" class="sheet install-sheet"><header><div><small>Install</small><h2>Add to Home Screen</h2></div><button value="cancel">×</button></header><p>On iPhone or iPad, tap Share, then choose “Add to Home Screen”.</p><button class="save" value="default">Done</button></form></dialog>
-<script src="assets/js/config.js?v=2.1.0"></script><script src="assets/js/api.js?v=2.1.0"></script><script src="assets/js/app.js?v=2.1.0"></script></body></html>
+
+<footer class="legal-footer" aria-label="Legal and support">
+  <a href="/privacy.html">Privacy</a>
+  <a href="/terms.html">Terms</a>
+  <a href="/refund.html">Refunds</a>
+  <a href="/acceptable-use.html">Acceptable Use</a>
+  <button id="feedbackBtn" type="button">Feedback</button>
+</footer>
+<dialog id="feedbackDialog">
+  <form method="dialog" class="sheet feedback-sheet">
+    <header><div><small>Support</small><h2>Send feedback</h2></div><button value="cancel">×</button></header>
+    <div class="fields">
+      <label class="wide">Category
+        <select id="feedbackCategory">
+          <option value="content">Generated content is inaccurate</option>
+          <option value="image">Image does not match</option>
+          <option value="display">Page display problem</option>
+          <option value="billing">Payment or subscription</option>
+          <option value="domain">Domain problem</option>
+          <option value="feature">Feature request</option>
+          <option value="other">Other</option>
+        </select>
+      </label>
+      <label class="wide">Email (optional)<input id="feedbackEmail" type="email"></label>
+      <label class="wide">Message<textarea id="feedbackMessage" rows="5" maxlength="2000"></textarea></label>
+    </div>
+    <p id="feedbackMessageState" class="message"></p>
+    <button id="sendFeedbackBtn" class="save" type="button">Send feedback</button>
+  </form>
+</dialog>
+<script src="assets/js/config.js?v=3.1.0"></script><script src="assets/js/api.js?v=3.1.0"></script><script src="assets/js/app.js?v=3.1.0"></script></body></html>

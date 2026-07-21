@@ -34,3 +34,6 @@ body.preview-mode{overflow:hidden;background:#000}.preview-mode .app{height:100v
 .four-plans{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 .four-limit-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))}
 @media(max-width:700px){.four-plans,.four-limit-actions{grid-template-columns:1fr!important}}
+
+/* v3.2 release-ready website management */
+.manage-site-sheet{width:min(760px,calc(100vw - 24px))}.manage-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.manage-grid button{min-height:112px;text-align:left;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.045);color:inherit;border-radius:17px;padding:17px;display:grid;align-content:center;gap:7px;cursor:pointer}.manage-grid button:hover{background:rgba(255,255,255,.085);border-color:rgba(255,255,255,.22)}.manage-grid strong{font-size:16px}.manage-grid span{font-size:12px;line-height:1.5;opacity:.68}.compact-sheet{max-width:600px}.compact-sheet .check-row{margin:10px 0}.floating-tools .tool:disabled{opacity:.45;cursor:not-allowed}@media(max-width:700px){.manage-grid{grid-template-columns:1fr}.manage-grid button{min-height:88px}.floating-tools{overflow-x:auto;justify-content:flex-start}.floating-tools .tool{flex:0 0 auto}.floating-tools .tool span{display:inline}.floating-tools .restart span{display:none}}

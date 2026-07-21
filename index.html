@@ -12,10 +12,9 @@
 <section id="workspace" class="workspace" hidden>
   <div class="floating-tools" aria-label="Website controls">
     <button id="backBtn" class="tool restart" type="button">↺ <span>重新开始</span></button>
-    <button id="editBtn" class="tool" type="button">＋ <span>添加资料</span></button>
-    <button id="addPhotosBtn" class="tool" type="button">▧ <span>添加图片</span></button>
-    <button id="newDesignBtn" class="tool" type="button">✦ <span>换一个</span></button>
-    <button id="shareBtn" class="tool" type="button">↗ <span>分享</span></button>
+    <button id="previewBtn" class="tool" type="button">◫ <span>预览网站</span></button>
+    <button id="shareBtn" class="tool" type="button">↗ <span>分享网站</span></button>
+    <button id="siteManageBtn" class="tool" type="button">⚙ <span>管理网站</span></button>
     <button id="publishBtn" class="tool publish" type="button">发布</button>
   </div>
   <input id="workspaceImages" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>
@@ -39,6 +38,20 @@
 <label class="wide" id="addressLabel" hidden><span id="labelAddress">Business address</span><input id="address" maxlength="260" autocomplete="street-address"></label>
 <label class="wide"><span id="labelProfiles">Official profiles (optional)</span><textarea id="sameAs" rows="2" maxlength="1000" placeholder="Google Business Profile, Yelp, LinkedIn or other official URLs"></textarea></label>
 </div><p id="detailsNote" class="form-note">Only publish information the business has confirmed. The platform does not invent licenses, ratings, years in business, prices or guarantees.</p><button id="saveDetailsBtn" class="save" value="default">Save details</button></form></dialog>
+
+<dialog id="siteManageDialog"><form method="dialog" class="sheet manage-site-sheet"><header><div><small id="manageSiteSmall">Website management</small><h2 id="manageSiteTitle">Manage your website</h2></div><button value="cancel">×</button></header>
+<p id="manageSiteIntro" class="plan-intro">Edit information, images, service areas, domain settings and future quote options from one place.</p>
+<div class="manage-grid">
+<button id="manageDetailsBtn" type="button"><strong id="manageDetailsTitle">Business information</strong><span id="manageDetailsDesc">Name, services, contact and business description</span></button>
+<button id="manageAreasBtn" type="button"><strong id="manageAreasTitle">Service areas</strong><span id="manageAreasDesc">Add cities and regions where the business serves</span></button>
+<button id="manageImagesBtn" type="button"><strong id="manageImagesTitle">Images</strong><span id="manageImagesDesc">Add or replace website images</span></button>
+<button id="manageDomainBtn" type="button"><strong id="manageDomainTitle">Custom domain</strong><span id="manageDomainDesc">Paid customers can request their own domain</span></button>
+<button id="manageQuoteBtn" type="button"><strong id="manageQuoteTitle">Quote module</strong><span id="manageQuoteDesc">Reserved for a future customer quote workflow</span></button>
+<button id="manageRedesignBtn" type="button"><strong id="manageRedesignTitle">New design</strong><span id="manageRedesignDesc">Regenerate the layout using confirmed information</span></button>
+</div><p id="manageSiteMessage" class="message"></p></form></dialog>
+<dialog id="domainDialog"><form method="dialog" class="sheet compact-sheet"><header><div><small id="domainSmall">Paid feature</small><h2 id="domainTitle">Custom domain</h2></div><button value="cancel">×</button></header><p id="domainIntro" class="plan-intro">Enter a domain you own. The first release records the request for manual DNS confirmation; it does not automatically change DNS.</p><label class="magic-label"><span id="domainLabel">Domain name</span><input id="customDomain" inputmode="url" autocomplete="off" placeholder="www.yourbusiness.com"></label><button id="saveDomainBtn" class="save" type="button">Save domain request</button><p id="domainMessage" class="message"></p></form></dialog>
+<dialog id="quoteDialog"><form method="dialog" class="sheet compact-sheet"><header><div><small id="quoteSmall">Reserved module</small><h2 id="quoteTitle">Quote requests</h2></div><button value="cancel">×</button></header><p id="quoteIntro" class="plan-intro">The automated quote module is reserved for a future release. For now, visitors can submit project details, dimensions, budget and photos for human review.</p><label class="check-row"><input id="quoteEnabled" type="checkbox"><span id="quoteEnabledLabel">Show “Request a quote” as a coming-soon contact option</span></label><button id="saveQuoteBtn" class="save" type="button">Save quote setting</button><p id="quoteMessage" class="message"></p></form></dialog>
+
 <dialog id="publishDialog"><form method="dialog" class="sheet publish-sheet"><header><div><small>Publish</small><h2>Continue with a plan</h2></div><button value="cancel">×</button></header><p class="plan-intro">Your preview is ready to share. Subscribe when you want to keep creating, remove the platform badge, and use your own domain.</p><div class="plans four-plans">
 <article class="featured"><span>Business Monthly</span><strong>$99<small>/month</small></strong><p>One professional website, custom domain, updates and independent branding.</p><button id="businessMonthlyBtn" type="button">Choose monthly</button></article>
 <article><span>Business Annual</span><strong>$990<small>/year</small></strong><p>The Business plan billed annually with two months of savings.</p><button id="businessYearlyBtn" type="button">Choose annual</button></article>

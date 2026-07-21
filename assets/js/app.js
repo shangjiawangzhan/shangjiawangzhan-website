@@ -81,7 +81,7 @@
     $('prompt').placeholder=c.placeholder;setText('#imageLabel',c.addImages);setText('#generateBtn span',c.generate);setText('#detailsBtn',c.details);
     const suggestionButtons=[...document.querySelectorAll('[data-prompt]')];
     suggestionButtons.forEach((b,i)=>{const item=c.suggestions[i];if(item){b.textContent=item[0];b.dataset.prompt=item[1]}});
-    setText('#backBtn span',c.restart);setText('#editBtn span',c.addDetails);setText('#addPhotosBtn span',c.addPhotos);setText('#newDesignBtn span',c.newDesign);setText('#shareBtn span',c.share);setText('#publishBtn',c.publish);
+    setText('#backBtn span',c.restart);setText('#previewBtn span',currentLang==='zh'?'预览网站':'Preview');setText('#shareBtn span',currentLang==='zh'?'分享网站':'Share');setText('#siteManageBtn span',currentLang==='zh'?'管理网站':'Manage site');setText('#publishBtn',c.publish);
     const detailSmall=details?.querySelector('header small'),detailH2=details?.querySelector('header h2');setText(detailSmall,c.optional);setText(detailH2,c.businessDetails);
     const labels=details?[...details.querySelectorAll('.fields label')]:[];[c.businessName,c.industry,c.city,c.contact,c.services,c.description].forEach((v,i)=>{if(labels[i])labels[i].childNodes[0].nodeValue=v});
     setText(details?.querySelector('.save'),c.save);
@@ -141,7 +141,12 @@
     finally{busy=false;$('generateBtn').disabled=false}
   }
 
-  $('createForm').addEventListener('submit',e=>{e.preventDefault();generateWebsite()});$('backBtn').onclick=()=>{show(create);$('prompt').focus()};$('editBtn').onclick=()=>details.showModal();$('addPhotosBtn').onclick=()=>$('workspaceImages').click();$('workspaceImages').addEventListener('change',async e=>{files=selectedFiles(e.target.files);if(files.length){text('imageCount',t().selected(files.length));await generateWebsite()}});$('newDesignBtn').onclick=()=>generateWebsite();
+  $('createForm').addEventListener('submit',e=>{e.preventDefault();generateWebsite()});
+  $('backBtn').onclick=()=>{show(create);$('prompt').focus()};
+  $('previewBtn').onclick=()=>{if(previewUrl)window.open(previewUrl,'_blank','noopener')};
+  $('siteManageBtn').onclick=()=>$('siteManageDialog').showModal();
+  $('workspaceImages').addEventListener('change',async e=>{files=selectedFiles(e.target.files);if(files.length){text('imageCount',t().selected(files.length));await generateWebsite()}});
+  $('saveDetailsBtn').addEventListener('click',async e=>{e.preventDefault();details.close();if(previewUrl||siteId)await generateWebsite()});
   $('shareBtn').onclick=async()=>{if(!previewUrl)return;try{if(navigator.share)await navigator.share({title:$('businessName').value.trim()||t().brand,url:previewUrl});else if(navigator.clipboard&&navigator.clipboard.writeText){await navigator.clipboard.writeText(previewUrl);alert(t().linkCopied)}else window.prompt(currentLang==='zh'?'复制此链接':'Copy this link',previewUrl)}catch(e){if(e&&e.name!=='AbortError')window.prompt(currentLang==='zh'?'复制此链接':'Copy this link',previewUrl)}};
   $('publishBtn').onclick=()=>publish.showModal();$('continuePreviewBtn').onclick=()=>{publish.close();if(previewUrl)window.open(previewUrl,'_blank','noopener')};
   async function pay(plan,msgEl){
@@ -233,6 +238,34 @@
 
   preview.addEventListener('load',()=>{if('Notification'in window&&Notification.permission==='granted'&&previewUrl){try{new Notification(currentLang==='zh'?'网站已生成':'Website ready',{body:$('businessName').value.trim()||'Business Website',icon:'/icons/icon-192.png'})}catch{}}});
 
+
+
+  // Compact website management: information, service areas, images, domain and quote placeholder.
+  const siteManageDialog=$('siteManageDialog'),domainDialog=$('domainDialog'),quoteDialog=$('quoteDialog');
+  function applyManagementLanguage(){
+    const zh=currentLang==='zh';
+    const values={
+      manageSiteSmall:zh?'网站管理':'Website management',manageSiteTitle:zh?'管理你的网站':'Manage your website',manageSiteIntro:zh?'资料、图片、服务地区、域名和报价入口统一收在这里，保持主页面简洁。':'Edit information, images, service areas, domain settings and quote options from one place.',
+      manageDetailsTitle:zh?'商家资料':'Business information',manageDetailsDesc:zh?'名称、服务、联系方式和商家介绍':'Name, services, contact and business description',
+      manageAreasTitle:zh?'服务地区':'Service areas',manageAreasDesc:zh?'添加商家提供服务的城市和区域':'Add cities and regions where the business serves',
+      manageImagesTitle:zh?'图片管理':'Images',manageImagesDesc:zh?'添加或替换网站图片':'Add or replace website images',
+      manageDomainTitle:zh?'自定义域名':'Custom domain',manageDomainDesc:zh?'付费客户可提交自己的域名':'Paid customers can request their own domain',
+      manageQuoteTitle:zh?'报价模块':'Quote module',manageQuoteDesc:zh?'为未来客户报价流程保留入口':'Reserved for a future customer quote workflow',
+      manageRedesignTitle:zh?'重新设计':'New design',manageRedesignDesc:zh?'使用已确认资料重新生成排版':'Regenerate the layout using confirmed information',
+      domainSmall:zh?'付费功能':'Paid feature',domainTitle:zh?'自定义域名':'Custom domain',domainIntro:zh?'填写你拥有的域名。当前版本保存申请并由平台人工确认 DNS，不会自动修改你的域名设置。':'Enter a domain you own. This release records the request for manual DNS confirmation and does not automatically change DNS.',domainLabel:zh?'域名':'Domain name',saveDomainBtn:zh?'保存域名申请':'Save domain request',
+      quoteSmall:zh?'预留模块':'Reserved module',quoteTitle:zh?'报价需求':'Quote requests',quoteIntro:zh?'自动报价功能为未来版本预留。现在可把“获取报价”作为联系入口，项目资料、尺寸、预算和图片仍由商家人工确认。':'The automated quote module is reserved for a future release. For now, “Request a quote” can remain a contact option with human review.',quoteEnabledLabel:zh?'显示“获取报价”预留联系入口':'Show “Request a quote” as a reserved contact option',saveQuoteBtn:zh?'保存报价设置':'Save quote setting'
+    };Object.entries(values).forEach(([id,v])=>text(id,v));
+  }
+  const originalApplyLanguage=applyLanguage;applyLanguage=function(){originalApplyLanguage();applyManagementLanguage()};applyManagementLanguage();
+  $('manageDetailsBtn').onclick=()=>{siteManageDialog.close();details.showModal()};
+  $('manageAreasBtn').onclick=()=>{siteManageDialog.close();details.showModal();setTimeout(()=>{$('serviceAreas').focus();$('serviceAreas').scrollIntoView({block:'center'})},120)};
+  $('manageImagesBtn').onclick=()=>{siteManageDialog.close();$('workspaceImages').click()};
+  $('manageDomainBtn').onclick=()=>{siteManageDialog.close();domainDialog.showModal()};
+  $('manageQuoteBtn').onclick=()=>{siteManageDialog.close();quoteDialog.showModal()};
+  $('manageRedesignBtn').onclick=async()=>{siteManageDialog.close();await generateWebsite()};
+  function normalizeDomain(value){return String(value||'').trim().toLowerCase().replace(/^https?:\/\//,'').replace(/\/.*$/,'').replace(/\.$/,'')}
+  $('saveDomainBtn').onclick=async()=>{const domain=normalizeDomain($('customDomain').value);if(!/^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/.test(domain)){text('domainMessage',currentLang==='zh'?'请输入有效域名，例如 www.example.com。':'Enter a valid domain such as www.example.com.');return}try{const user=await refreshAccount(false);if(!user){domainDialog.close();accountDialog.showModal();text('authMessage',x().loginRequired);return}await SJW_API.siteSettings(siteId,{customDomain:domain,domainStatus:'requested'});text('domainMessage',currentLang==='zh'?'域名申请已保存，等待 DNS 人工确认。':'Domain request saved for manual DNS confirmation.')}catch(e){text('domainMessage',e.message||t().somethingWrong)}};
+  $('saveQuoteBtn').onclick=async()=>{try{const user=await refreshAccount(false);if(!user){quoteDialog.close();accountDialog.showModal();text('authMessage',x().loginRequired);return}await SJW_API.siteSettings(siteId,{quoteModule:{enabled:$('quoteEnabled').checked,status:'reserved'}});text('quoteMessage',currentLang==='zh'?'报价入口设置已保存。自动报价仍为未来预留功能。':'Quote setting saved. Automated quoting remains reserved for a future release.')}catch(e){text('quoteMessage',e.message||t().somethingWrong)}};
 
   const feedbackDialog=$('feedbackDialog');
   if($('feedbackBtn')) $('feedbackBtn').onclick=()=>feedbackDialog.showModal();

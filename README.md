@@ -21,3 +21,7 @@ Four exact plan actions:
 - Business Pro Annual — $1,990/year
 
 Deploy only after the backend Supabase environment variables and provider settings are complete.
+
+## Release-ready management update
+
+Version remains `3.2.0`. See `RELEASE-NOTES.md` for the final launch changes and release boundary.

@@ -1,1 +1,47 @@
-{"name":"Business Website","short_name":"Business Website","start_url":"/","display":"standalone","background_color":"#0a0d12","theme_color":"#0a0d12","version":"2.0"}
+{
+  "id": "/",
+  "name": "Business Website",
+  "short_name": "Business Website",
+  "description": "Create and manage a professional business website.",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "minimal-ui"
+  ],
+  "background_color": "#0a0d12",
+  "theme_color": "#0a0d12",
+  "orientation": "any",
+  "categories": [
+    "business",
+    "productivity"
+  ],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Create website",
+      "short_name": "Create",
+      "url": "/?action=create"
+    },
+    {
+      "name": "My account",
+      "short_name": "Account",
+      "url": "/?action=account"
+    }
+  ]
+}

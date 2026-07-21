@@ -99,9 +99,50 @@
   $('shareBtn').onclick=async()=>{if(!previewUrl)return;try{if(navigator.share)await navigator.share({title:$('businessName').value.trim()||t().brand,url:previewUrl});else if(navigator.clipboard&&navigator.clipboard.writeText){await navigator.clipboard.writeText(previewUrl);alert(t().linkCopied)}else window.prompt(currentLang==='zh'?'复制此链接':'Copy this link',previewUrl)}catch(e){if(e&&e.name!=='AbortError')window.prompt(currentLang==='zh'?'复制此链接':'Copy this link',previewUrl)}};
   $('publishBtn').onclick=()=>publish.showModal();$('continuePreviewBtn').onclick=()=>{publish.close();if(previewUrl)window.open(previewUrl,'_blank','noopener')};
   async function pay(plan,msgEl){if(busy)return;busy=true;const buttons=['monthlyBtn','yearlyBtn','limitMonthly','limitYearly'].map($).filter(Boolean);buttons.forEach(b=>b.disabled=true);text(msgEl,t().openingCheckout);try{if(!siteId)siteId=makeSiteId();const r=await SJW_API.checkout({plan,email:'',siteId,siteName:$('businessName').value.trim()||t().brand,returnUrl:cfg.siteUrl});location.href=validUrl(r.url,'stripe')}catch(e){text(msgEl,e.message||t().unableCheckout);busy=false;buttons.forEach(b=>b.disabled=false)}}
-  $('monthlyBtn').onclick=()=>pay('monthly','publishMessage');$('yearlyBtn').onclick=()=>pay('yearly','publishMessage');$('limitMonthly').onclick=()=>pay('monthly','limitMessage');$('limitYearly').onclick=()=>pay('yearly','limitMessage');
+  $('monthlyBtn').onclick=()=>pay('business-monthly','publishMessage');$('yearlyBtn').onclick=()=>pay('pro-monthly','publishMessage');$('limitMonthly').onclick=()=>pay('business-monthly','limitMessage');$('limitYearly').onclick=()=>pay('pro-monthly','limitMessage');
   $('manageBtn').onclick=async()=>{const email=window.prompt(t().membershipEmail);if(!email)return;try{const r=await SJW_API.portal({email,returnUrl:cfg.siteUrl});location.href=validUrl(r.url,'stripe')}catch(e){alert(e.message||t().unableManage)}};
 
   applyLanguage();refreshTrial();
   window.addEventListener('error',()=>{try{clearPreviewTimer();show(create);text('message',t().appStart)}catch{}});window.addEventListener('unhandledrejection',()=>{try{if(!busy)text('message',t().somethingWrong)}catch{}});
+
+  // PWA installation and application shell
+  let deferredInstallPrompt=null;
+  const installBtn=$('installBtn'),installDialog=$('installDialog');
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;if(installBtn)installBtn.hidden=false});
+  window.addEventListener('appinstalled',()=>{deferredInstallPrompt=null;if(installBtn)installBtn.hidden=true});
+  if(installBtn)installBtn.onclick=async()=>{
+    if(deferredInstallPrompt){deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null;installBtn.hidden=true;return}
+    installDialog.showModal();
+  };
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',()=>navigator.serviceWorker.register('/service-worker.js').catch(()=>{}));
+  }
+
+  // Account, customer records and notifications
+  const accountDialog=$('accountDialog'),authPanel=$('authPanel'),accountPanel=$('accountPanel');
+  function authToken(){try{return localStorage.getItem('sjw_auth_token')||''}catch{return''}}
+  function saveAuth(token){try{if(token)localStorage.setItem('sjw_auth_token',token);else localStorage.removeItem('sjw_auth_token')}catch{}}
+  async function refreshAccount(){
+    if(!authToken()){authPanel.hidden=false;accountPanel.hidden=true;$('accountBtn').textContent=currentLang==='zh'?'登录':'Sign in';return null}
+    try{
+      const r=await SJW_API.me();authPanel.hidden=true;accountPanel.hidden=false;$('accountEmail').textContent=r.user.email;$('accountBtn').textContent=currentLang==='zh'?'账户':'Account';
+      try{const n=await SJW_API.notifications();const unread=n.notifications.filter(x=>!x.read).length;$('notificationCount').textContent=unread?String(unread):''}catch{}
+      return r.user
+    }catch{saveAuth('');authPanel.hidden=false;accountPanel.hidden=true;return null}
+  }
+  $('accountBtn').onclick=async()=>{accountDialog.showModal();await refreshAccount()};
+  $('loginBtn').onclick=async()=>{text('authMessage','');try{const r=await SJW_API.login($('authEmail').value.trim(),$('authPassword').value);saveAuth(r.token);await refreshAccount()}catch(e){text('authMessage',e.message)}};
+  $('registerBtn').onclick=async()=>{text('authMessage','');try{const r=await SJW_API.register($('authEmail').value.trim(),$('authPassword').value);saveAuth(r.token);await refreshAccount()}catch(e){text('authMessage',e.message)}};
+  $('logoutBtn').onclick=async()=>{try{await SJW_API.logout()}catch{}saveAuth('');$('accountContent').innerHTML='';await refreshAccount()};
+  $('mySitesBtn').onclick=async()=>{try{const r=await SJW_API.sites();$('accountContent').innerHTML=r.sites.length?r.sites.map(s=>`<a class="record-card" href="${s.url}" target="_blank" rel="noopener"><strong>${escapeHtml(s.name||'Website')}</strong><span>${escapeHtml(s.city||s.industry||'')}</span><small>${new Date(s.updatedAt).toLocaleString()}</small></a>`).join(''):`<p class="empty-state">${currentLang==='zh'?'还没有已保存的网站。':'No saved websites yet.'}</p>`}catch(e){$('accountContent').textContent=e.message}};
+  $('notificationsBtn').onclick=async()=>{try{const r=await SJW_API.notifications();$('accountContent').innerHTML=r.notifications.length?r.notifications.map(n=>`<article class="record-card"><strong>${escapeHtml(n.title)}</strong><span>${escapeHtml(n.message)}</span><small>${new Date(n.createdAt).toLocaleString()}</small></article>`).join(''):`<p class="empty-state">${currentLang==='zh'?'暂无通知。':'No notifications yet.'}</p>`;await SJW_API.readNotifications('');$('notificationCount').textContent=''}catch(e){$('accountContent').textContent=e.message}};
+  $('enableNotificationsBtn').onclick=async()=>{if(!('Notification'in window))return alert(currentLang==='zh'?'此设备不支持通知。':'Notifications are not supported on this device.');const p=await Notification.requestPermission();if(p==='granted')new Notification(currentLang==='zh'?'通知已开启':'Notifications enabled',{body:currentLang==='zh'?'网站生成完成时可以收到设备提醒。':'You can receive device alerts when website creation finishes.'})};
+  function escapeHtml(v){return String(v||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+  refreshAccount();
+
+  // Show a device notification after a successful generation when permission already exists.
+  const originalGenerate=generateWebsite;
+
+  preview.addEventListener('load',()=>{if('Notification'in window&&Notification.permission==='granted'&&previewUrl){try{new Notification(currentLang==='zh'?'网站已生成':'Website ready',{body:$('businessName').value.trim()||'Business Website',icon:'/icons/icon-192.png'})}catch{}}});
+
 })();

@@ -21,3 +21,13 @@ Custom-domain requests are recorded for manual confirmation. Automatic DNS chang
 ## Recommended Git tag
 
 `v3.2.0`
+
+## v3.2.0 post-release stability update
+
+- Kept the public product version at 3.2.0.
+- Simplified the generated-site workspace to Preview, Publish, and one More Actions menu.
+- Separated platform controls from the merchant website experience.
+- Removed the reserved quote-module control from the main management interface.
+- Added subscription status display, subscription restoration, data export, and confirmed account deletion controls.
+- Paid accounts now publish directly after server-side subscription verification.
+- Prevented checkout from opening a second subscription for an account that already has an active subscription.

@@ -22,5 +22,9 @@ window.SJW_API={
  notifications:()=>request('/api/account/notifications',{timeout:15000}),
  feedback:data=>request('/api/feedback',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),timeout:20000}),
  readNotifications:id=>request('/api/account/notifications/read',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:id||''}),timeout:15000}),
- siteSettings:(siteId,data)=>request(`/api/account/sites/${encodeURIComponent(siteId)}/settings`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),timeout:20000})
+ siteSettings:(siteId,data)=>request(`/api/account/sites/${encodeURIComponent(siteId)}/settings`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),timeout:20000}),
+ subscriptionStatus:()=>request('/api/subscription-status',{timeout:30000}),
+ publishSite:siteId=>request(`/api/v1/sites/${encodeURIComponent(siteId)}/publish`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({confirm:true}),timeout:20000}),
+ exportAccount:()=>request('/api/account/export',{timeout:30000}),
+ deleteAccount:()=>request('/api/account',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({confirm:true}),timeout:30000})
 }})();

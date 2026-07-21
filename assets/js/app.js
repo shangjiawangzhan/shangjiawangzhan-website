@@ -81,7 +81,7 @@
     $('prompt').placeholder=c.placeholder;setText('#imageLabel',c.addImages);setText('#generateBtn span',c.generate);setText('#detailsBtn',c.details);
     const suggestionButtons=[...document.querySelectorAll('[data-prompt]')];
     suggestionButtons.forEach((b,i)=>{const item=c.suggestions[i];if(item){b.textContent=item[0];b.dataset.prompt=item[1]}});
-    setText('#backBtn span',c.restart);setText('#previewBtn span',currentLang==='zh'?'预览网站':'Preview');setText('#shareBtn span',currentLang==='zh'?'分享网站':'Share');setText('#siteManageBtn span',currentLang==='zh'?'管理网站':'Manage site');setText('#publishBtn',c.publish);
+    setText('#backBtn',currentLang==='zh'?'重新开始':'Start over');setText('#previewBtn span',currentLang==='zh'?'预览网站':'Preview website');setText('#shareBtn',currentLang==='zh'?'分享网站':'Share website');setText('#siteManageBtn',currentLang==='zh'?'管理网站':'Manage website');setText('#publishBtn',currentLang==='zh'?'发布网站':'Publish website');setText('#workspaceMenuSmall',currentLang==='zh'?'网站':'Website');setText('#workspaceMenuTitle',currentLang==='zh'?'更多操作':'More actions');
     const detailSmall=details?.querySelector('header small'),detailH2=details?.querySelector('header h2');setText(detailSmall,c.optional);setText(detailH2,c.businessDetails);
     const labels=details?[...details.querySelectorAll('.fields label')]:[];[c.businessName,c.industry,c.city,c.contact,c.services,c.description].forEach((v,i)=>{if(labels[i])labels[i].childNodes[0].nodeValue=v});
     setText(details?.querySelector('.save'),c.save);
@@ -100,7 +100,7 @@
       labelPhysical:z.physical,labelAddress:z.address,labelProfiles:z.profiles,saveDetailsBtn:z.save,detailsNote:z.note,
       accountSmall:z.account,accountTitle:z.signIn,googleLoginText:z.google,authOrText:z.or,magicEmailLabel:z.magicEmail,
       magicLinkBtn:z.magicButton,authPrivacyText:z.magicPrivacy,mySitesBtn:z.sites,notificationsBtn:z.notifications,
-      manageSubscriptionBtn:z.subscription,enableNotificationsBtn:z.device,logoutBtn:z.signOut
+      manageSubscriptionBtn:z.subscription,restoreSubscriptionBtn:currentLang==='zh'?'恢复订阅':'Restore subscription',exportAccountBtn:currentLang==='zh'?'导出我的数据':'Export my data',deleteAccountBtn:currentLang==='zh'?'删除账户':'Delete account',enableNotificationsBtn:z.device,logoutBtn:z.signOut
     };
     Object.entries(pairs).forEach(([id,value])=>setText('#'+id,value));
   }
@@ -142,13 +142,29 @@
   }
 
   $('createForm').addEventListener('submit',e=>{e.preventDefault();generateWebsite()});
-  $('backBtn').onclick=()=>{show(create);$('prompt').focus()};
+  const workspaceMenuDialog=$('workspaceMenuDialog');
+  $('workspaceMenuBtn').onclick=()=>workspaceMenuDialog.showModal();
+  $('backBtn').onclick=()=>{workspaceMenuDialog.close();show(create);$('prompt').focus()};
   $('previewBtn').onclick=()=>{if(previewUrl)window.open(previewUrl,'_blank','noopener')};
-  $('siteManageBtn').onclick=()=>$('siteManageDialog').showModal();
+  $('siteManageBtn').onclick=()=>{workspaceMenuDialog.close();$('siteManageDialog').showModal()};
   $('workspaceImages').addEventListener('change',async e=>{files=selectedFiles(e.target.files);if(files.length){text('imageCount',t().selected(files.length));await generateWebsite()}});
   $('saveDetailsBtn').addEventListener('click',async e=>{e.preventDefault();details.close();if(previewUrl||siteId)await generateWebsite()});
-  $('shareBtn').onclick=async()=>{if(!previewUrl)return;try{if(navigator.share)await navigator.share({title:$('businessName').value.trim()||t().brand,url:previewUrl});else if(navigator.clipboard&&navigator.clipboard.writeText){await navigator.clipboard.writeText(previewUrl);alert(t().linkCopied)}else window.prompt(currentLang==='zh'?'复制此链接':'Copy this link',previewUrl)}catch(e){if(e&&e.name!=='AbortError')window.prompt(currentLang==='zh'?'复制此链接':'Copy this link',previewUrl)}};
-  $('publishBtn').onclick=()=>publish.showModal();$('continuePreviewBtn').onclick=()=>{publish.close();if(previewUrl)window.open(previewUrl,'_blank','noopener')};
+  $('shareBtn').onclick=async()=>{workspaceMenuDialog.close();if(!previewUrl)return;try{if(navigator.share)await navigator.share({title:$('businessName').value.trim()||t().brand,url:previewUrl});else if(navigator.clipboard&&navigator.clipboard.writeText){await navigator.clipboard.writeText(previewUrl);alert(t().linkCopied)}else window.prompt(currentLang==='zh'?'复制此链接':'Copy this link',previewUrl)}catch(e){if(e&&e.name!=='AbortError')window.prompt(currentLang==='zh'?'复制此链接':'Copy this link',previewUrl)}};
+  $('publishBtn').onclick=async()=>{
+    const user=await refreshAccount(false);
+    if(!user){accountDialog.showModal();text('authMessage',x().loginRequired);return}
+    try{
+      const status=await SJW_API.subscriptionStatus();
+      if(status.active){
+        const r=await SJW_API.publishSite(siteId);
+        previewUrl=r?.data?.url||previewUrl;
+        $('publishBtn').textContent=currentLang==='zh'?'已发布':'Published';
+        alert(currentLang==='zh'?'网站已发布。':'Website published.');
+        return;
+      }
+    }catch{}
+    publish.showModal();
+  };$('continuePreviewBtn').onclick=()=>{publish.close();if(previewUrl)window.open(previewUrl,'_blank','noopener')};
   async function pay(plan,msgEl){
     if(busy)return;
     const user=await refreshAccount(false);
@@ -162,6 +178,7 @@
       location.href=validUrl(r.url,'stripe')
     }catch(e){
       if(e.code==='AUTH_REQUIRED'){accountDialog.showModal();text('authMessage',x().loginRequired)}
+      else if(e.code==='SUBSCRIPTION_ALREADY_ACTIVE'){publish.close();accountDialog.showModal();await refreshAccount();text('accountContent',currentLang==='zh'?'此账户已有有效订阅，无需重复付款。':'This account already has an active subscription. No additional payment is needed.')}
       else text(msgEl,e.message||t().unableCheckout);
       busy=false;buttons.forEach(b=>b.disabled=false)
     }
@@ -202,6 +219,7 @@
       authPanel.hidden=true;accountPanel.hidden=false;$('accountEmail').textContent=r.user.email;
       $('accountBtn').textContent=currentLang==='zh'?'账户':'Account';
       try{const n=await SJW_API.notifications();const unread=n.notifications.filter(x=>!x.read).length;$('notificationCount').textContent=unread?String(unread):''}catch{}
+      try{const sub=await SJW_API.subscriptionStatus();$('subscriptionSummary').textContent=sub.active?(currentLang==='zh'?`当前方案：${sub.plan||'有效订阅'} · ${sub.status}`:`Current plan: ${sub.plan||'Active subscription'} · ${sub.status}`):(currentLang==='zh'?'当前没有有效订阅。':'No active subscription.')}catch{$('subscriptionSummary').textContent=''}
       return r.user
     }catch(e){
       if(clearInvalid){authPanel.hidden=false;accountPanel.hidden=true}
@@ -226,6 +244,18 @@
       location.href=validUrl(r.url,'stripe')
     }catch(e){alert(e.message||t().unableManage)}
   };
+  $('restoreSubscriptionBtn').onclick=async()=>{
+    text('accountContent',currentLang==='zh'?'正在核对订阅…':'Checking subscription…');
+    try{const sub=await SJW_API.subscriptionStatus();$('subscriptionSummary').textContent=sub.active?(currentLang==='zh'?`订阅已恢复：${sub.plan||sub.status}`:`Subscription restored: ${sub.plan||sub.status}`):(currentLang==='zh'?'没有找到有效订阅。如付款邮箱不同，请联系支持。':'No active subscription was found. Contact support if a different payment email was used.');$('accountContent').textContent=''}catch(e){$('accountContent').textContent=e.message||t().somethingWrong}
+  };
+  $('exportAccountBtn').onclick=async()=>{
+    try{const data=await SJW_API.exportAccount();const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='business-website-account-export.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}catch(e){alert(e.message||t().somethingWrong)}
+  };
+  $('deleteAccountBtn').onclick=async()=>{
+    const ok=confirm(currentLang==='zh'?'确定删除账户和网站数据吗？此操作无法撤销。有效订阅需要先在会员管理中取消。':'Delete your account and website data? This cannot be undone. Cancel any active subscription in membership management first.');
+    if(!ok)return;
+    try{await SJW_API.deleteAccount();await window.SJW_AUTH.signOut();location.reload()}catch(e){alert(e.message||t().somethingWrong)}
+  };
   $('mySitesBtn').onclick=async()=>{try{const r=await SJW_API.sites();$('accountContent').innerHTML=r.sites.length?r.sites.map(s=>`<a class="record-card" href="${s.url}" target="_blank" rel="noopener"><strong>${escapeHtml(s.name||'Website')}</strong><span>${escapeHtml(s.city||s.industry||'')}</span><small>${new Date(s.updatedAt).toLocaleString()}</small></a>`).join(''):`<p class="empty-state">${currentLang==='zh'?'还没有已保存的网站。':'No saved websites yet.'}</p>`}catch(e){$('accountContent').textContent=e.message}};
   $('notificationsBtn').onclick=async()=>{try{const r=await SJW_API.notifications();$('accountContent').innerHTML=r.notifications.length?r.notifications.map(n=>`<article class="record-card"><strong>${escapeHtml(n.title)}</strong><span>${escapeHtml(n.message)}</span><small>${new Date(n.createdAt).toLocaleString()}</small></article>`).join(''):`<p class="empty-state">${currentLang==='zh'?'暂无通知。':'No notifications yet.'}</p>`;await SJW_API.readNotifications('');$('notificationCount').textContent=''}catch(e){$('accountContent').textContent=e.message}};
   $('enableNotificationsBtn').onclick=async()=>{if(!('Notification'in window))return alert(currentLang==='zh'?'此设备不支持通知。':'Notifications are not supported on this device.');const p=await Notification.requestPermission();if(p==='granted')new Notification(currentLang==='zh'?'通知已开启':'Notifications enabled',{body:currentLang==='zh'?'网站生成完成时可以收到设备提醒。':'You can receive device alerts when website creation finishes.'})};
@@ -241,7 +271,7 @@
 
 
   // Compact website management: information, service areas, images, domain and quote placeholder.
-  const siteManageDialog=$('siteManageDialog'),domainDialog=$('domainDialog'),quoteDialog=$('quoteDialog');
+  const siteManageDialog=$('siteManageDialog'),domainDialog=$('domainDialog');
   function applyManagementLanguage(){
     const zh=currentLang==='zh';
     const values={
@@ -250,10 +280,8 @@
       manageAreasTitle:zh?'服务地区':'Service areas',manageAreasDesc:zh?'添加商家提供服务的城市和区域':'Add cities and regions where the business serves',
       manageImagesTitle:zh?'图片管理':'Images',manageImagesDesc:zh?'添加或替换网站图片':'Add or replace website images',
       manageDomainTitle:zh?'自定义域名':'Custom domain',manageDomainDesc:zh?'付费客户可提交自己的域名':'Paid customers can request their own domain',
-      manageQuoteTitle:zh?'报价模块':'Quote module',manageQuoteDesc:zh?'为未来客户报价流程保留入口':'Reserved for a future customer quote workflow',
       manageRedesignTitle:zh?'重新设计':'New design',manageRedesignDesc:zh?'使用已确认资料重新生成排版':'Regenerate the layout using confirmed information',
       domainSmall:zh?'付费功能':'Paid feature',domainTitle:zh?'自定义域名':'Custom domain',domainIntro:zh?'填写你拥有的域名。当前版本保存申请并由平台人工确认 DNS，不会自动修改你的域名设置。':'Enter a domain you own. This release records the request for manual DNS confirmation and does not automatically change DNS.',domainLabel:zh?'域名':'Domain name',saveDomainBtn:zh?'保存域名申请':'Save domain request',
-      quoteSmall:zh?'预留模块':'Reserved module',quoteTitle:zh?'报价需求':'Quote requests',quoteIntro:zh?'自动报价功能为未来版本预留。现在可把“获取报价”作为联系入口，项目资料、尺寸、预算和图片仍由商家人工确认。':'The automated quote module is reserved for a future release. For now, “Request a quote” can remain a contact option with human review.',quoteEnabledLabel:zh?'显示“获取报价”预留联系入口':'Show “Request a quote” as a reserved contact option',saveQuoteBtn:zh?'保存报价设置':'Save quote setting'
     };Object.entries(values).forEach(([id,v])=>text(id,v));
   }
   const originalApplyLanguage=applyLanguage;applyLanguage=function(){originalApplyLanguage();applyManagementLanguage()};applyManagementLanguage();
@@ -261,11 +289,9 @@
   $('manageAreasBtn').onclick=()=>{siteManageDialog.close();details.showModal();setTimeout(()=>{$('serviceAreas').focus();$('serviceAreas').scrollIntoView({block:'center'})},120)};
   $('manageImagesBtn').onclick=()=>{siteManageDialog.close();$('workspaceImages').click()};
   $('manageDomainBtn').onclick=()=>{siteManageDialog.close();domainDialog.showModal()};
-  $('manageQuoteBtn').onclick=()=>{siteManageDialog.close();quoteDialog.showModal()};
   $('manageRedesignBtn').onclick=async()=>{siteManageDialog.close();await generateWebsite()};
   function normalizeDomain(value){return String(value||'').trim().toLowerCase().replace(/^https?:\/\//,'').replace(/\/.*$/,'').replace(/\.$/,'')}
   $('saveDomainBtn').onclick=async()=>{const domain=normalizeDomain($('customDomain').value);if(!/^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/.test(domain)){text('domainMessage',currentLang==='zh'?'请输入有效域名，例如 www.example.com。':'Enter a valid domain such as www.example.com.');return}try{const user=await refreshAccount(false);if(!user){domainDialog.close();accountDialog.showModal();text('authMessage',x().loginRequired);return}await SJW_API.siteSettings(siteId,{customDomain:domain,domainStatus:'requested'});text('domainMessage',currentLang==='zh'?'域名申请已保存，等待 DNS 人工确认。':'Domain request saved for manual DNS confirmation.')}catch(e){text('domainMessage',e.message||t().somethingWrong)}};
-  $('saveQuoteBtn').onclick=async()=>{try{const user=await refreshAccount(false);if(!user){quoteDialog.close();accountDialog.showModal();text('authMessage',x().loginRequired);return}await SJW_API.siteSettings(siteId,{quoteModule:{enabled:$('quoteEnabled').checked,status:'reserved'}});text('quoteMessage',currentLang==='zh'?'报价入口设置已保存。自动报价仍为未来预留功能。':'Quote setting saved. Automated quoting remains reserved for a future release.')}catch(e){text('quoteMessage',e.message||t().somethingWrong)}};
 
   const feedbackDialog=$('feedbackDialog');
   if($('feedbackBtn')) $('feedbackBtn').onclick=()=>feedbackDialog.showModal();

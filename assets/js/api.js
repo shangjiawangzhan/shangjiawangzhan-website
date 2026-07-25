@@ -1,6 +1,6 @@
 (()=>{const c=window.SJW_CONFIG;
 async function token(){try{return await window.SJW_AUTH.getAccessToken()}catch{return''}}
-async function request(path,{method='GET',body,headers={},timeout=90000}={}){
+async function request(path,{method='GET',body,headers={},timeout=120000}={}){
  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),timeout);
  try{
   const auth=await token();
@@ -13,7 +13,7 @@ async function request(path,{method='GET',body,headers={},timeout=90000}={}){
 window.SJW_API={
  trial:()=>request('/api/trial-status',{timeout:15000}),
  upload:file=>{const f=new FormData();f.append('file',file);return request('/api/uploads',{method:'POST',body:f,timeout:60000})},
- generate:data=>request('/api/generate-site',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),timeout:90000}),
+ generate:data=>request('/api/generate-site',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),timeout:120000}),
  checkout:data=>request('/api/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),timeout:30000}),
  portal:data=>request('/api/create-portal-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),timeout:30000}),
  authConfig:()=>request('/api/auth/config',{timeout:15000}),
@@ -22,5 +22,9 @@ window.SJW_API={
  notifications:()=>request('/api/account/notifications',{timeout:15000}),
  feedback:data=>request('/api/feedback',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),timeout:20000}),
  readNotifications:id=>request('/api/account/notifications/read',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:id||''}),timeout:15000}),
- siteSettings:(siteId,data)=>request(`/api/account/sites/${encodeURIComponent(siteId)}/settings`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),timeout:20000})
+ siteSettings:(siteId,data)=>request(`/api/account/sites/${encodeURIComponent(siteId)}/settings`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),timeout:20000}),
+ subscriptionStatus:()=>request('/api/subscription-status',{timeout:30000}),
+ publishSite:siteId=>request(`/api/v1/sites/${encodeURIComponent(siteId)}/publish`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({confirm:true}),timeout:20000}),
+ exportAccount:()=>request('/api/account/export',{timeout:30000}),
+ deleteAccount:()=>request('/api/account',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({confirm:true}),timeout:30000})
 }})();

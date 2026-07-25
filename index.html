@@ -10,10 +10,12 @@
 </form></div></section>
 
 <section id="workspace" class="workspace" hidden>
-  <div class="floating-tools compact-controls" aria-label="Website controls">
-    <button id="previewBtn" class="tool" type="button">◫ <span>预览网站</span></button>
+  <div class="floating-tools" aria-label="Website controls">
+    <button id="backBtn" class="tool restart" type="button">↺ <span>重新开始</span></button>
+    <button id="previewBtn" class="tool" type="button">◫ <span>网站预览</span></button>
+    <button id="shareBtn" class="tool" type="button">↗ <span>复制 / 转发</span></button>
+    <button id="siteManageBtn" class="tool" type="button">⚙ <span>设置与域名</span></button>
     <button id="publishBtn" class="tool publish" type="button">发布网站</button>
-    <button id="workspaceMenuBtn" class="tool icon-only" type="button" aria-label="More website actions" aria-haspopup="dialog">•••</button>
   </div>
   <input id="workspaceImages" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>
   <div class="stage"><div id="frameShell" class="frame-shell desktop"><div id="generatingOverlay" class="generating-overlay" hidden><div class="site-skeleton"><div class="sk-nav"></div><div class="sk-hero"><span></span><span></span><span></span></div><div class="sk-cards"><i></i><i></i><i></i></div></div><div class="generation-status"><strong id="loadingText">Creating your website…</strong><span id="elapsedText">0s</span><div class="line"><span id="progress"></span></div></div></div><iframe id="preview" title="Website preview" sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation" referrerpolicy="no-referrer"></iframe></div></div>
@@ -37,19 +39,18 @@
 <label class="wide"><span id="labelProfiles">Official profiles (optional)</span><textarea id="sameAs" rows="2" maxlength="1000" placeholder="Google Business Profile, Yelp, LinkedIn or other official URLs"></textarea></label>
 </div><p id="detailsNote" class="form-note">Only publish information the business has confirmed. The platform does not invent licenses, ratings, years in business, prices or guarantees.</p><button id="saveDetailsBtn" class="save" value="default">Save details</button></form></dialog>
 
-<dialog id="workspaceMenuDialog"><form method="dialog" class="sheet compact-sheet action-sheet"><header><div><small id="workspaceMenuSmall">Website</small><h2 id="workspaceMenuTitle">More actions</h2></div><button value="cancel">×</button></header><div class="action-list"><button id="siteManageBtn" type="button">管理网站</button><button id="shareBtn" type="button">分享网站</button><button id="backBtn" type="button">重新开始</button></div></form></dialog>
-
 <dialog id="siteManageDialog"><form method="dialog" class="sheet manage-site-sheet"><header><div><small id="manageSiteSmall">Website management</small><h2 id="manageSiteTitle">Manage your website</h2></div><button value="cancel">×</button></header>
-<p id="manageSiteIntro" class="plan-intro">Edit information, images, service areas, domain settings and future quote options from one place.</p>
+<p id="manageSiteIntro" class="plan-intro">Manage the website from one clear place: business information, images, sharing, publishing and custom domain.</p>
 <div class="manage-grid">
 <button id="manageDetailsBtn" type="button"><strong id="manageDetailsTitle">Business information</strong><span id="manageDetailsDesc">Name, services, contact and business description</span></button>
 <button id="manageAreasBtn" type="button"><strong id="manageAreasTitle">Service areas</strong><span id="manageAreasDesc">Add cities and regions where the business serves</span></button>
 <button id="manageImagesBtn" type="button"><strong id="manageImagesTitle">Images</strong><span id="manageImagesDesc">Add or replace website images</span></button>
-<button id="manageDomainBtn" type="button"><strong id="manageDomainTitle">Custom domain</strong><span id="manageDomainDesc">Paid customers can request their own domain</span></button>
+<button id="manageDomainBtn" type="button" class="priority-card"><strong id="manageDomainTitle">Custom domain</strong><span id="manageDomainDesc">Connect a domain you own and review DNS status</span></button>
+<button id="manageQuoteBtn" type="button"><strong id="manageQuoteTitle">Quote module</strong><span id="manageQuoteDesc">Reserved for a future customer quote workflow</span></button>
 <button id="manageRedesignBtn" type="button"><strong id="manageRedesignTitle">New design</strong><span id="manageRedesignDesc">Regenerate the layout using confirmed information</span></button>
 </div><p id="manageSiteMessage" class="message"></p></form></dialog>
-<dialog id="domainDialog"><form method="dialog" class="sheet compact-sheet"><header><div><small id="domainSmall">Paid feature</small><h2 id="domainTitle">Custom domain</h2></div><button value="cancel">×</button></header><p id="domainIntro" class="plan-intro">Enter a domain you own. The first release records the request for manual DNS confirmation; it does not automatically change DNS.</p><label class="magic-label"><span id="domainLabel">Domain name</span><input id="customDomain" inputmode="url" autocomplete="off" placeholder="www.yourbusiness.com"></label><button id="saveDomainBtn" class="save" type="button">Save domain request</button><p id="domainMessage" class="message"></p></form></dialog>
-
+<dialog id="domainDialog"><form method="dialog" class="sheet compact-sheet"><header><div><small id="domainSmall">Paid feature</small><h2 id="domainTitle">Custom domain</h2></div><button value="cancel">×</button></header><p id="domainIntro" class="plan-intro">Enter a domain you own. Save the request, then follow the DNS instructions. The domain becomes active only after DNS and SSL are confirmed.</p><div class="domain-steps"><div><b>1</b><span>Enter your domain</span></div><div><b>2</b><span>Update DNS</span></div><div><b>3</b><span>Wait for verification</span></div></div><label class="magic-label"><span id="domainLabel">Domain name</span><input id="customDomain" inputmode="url" autocomplete="off" placeholder="www.yourbusiness.com"></label><button id="saveDomainBtn" class="save" type="button">Save domain request</button><p id="domainMessage" class="message"></p></form></dialog>
+<dialog id="quoteDialog"><form method="dialog" class="sheet compact-sheet"><header><div><small id="quoteSmall">Reserved module</small><h2 id="quoteTitle">Quote requests</h2></div><button value="cancel">×</button></header><p id="quoteIntro" class="plan-intro">The automated quote module is reserved for a future release. For now, visitors can submit project details, dimensions, budget and photos for human review.</p><label class="check-row"><input id="quoteEnabled" type="checkbox"><span id="quoteEnabledLabel">Show “Request a quote” as a coming-soon contact option</span></label><button id="saveQuoteBtn" class="save" type="button">Save quote setting</button><p id="quoteMessage" class="message"></p></form></dialog>
 
 <dialog id="publishDialog"><form method="dialog" class="sheet publish-sheet"><header><div><small>Publish</small><h2>Continue with a plan</h2></div><button value="cancel">×</button></header><p class="plan-intro">Your preview is ready to share. Subscribe when you want to keep creating, remove the platform badge, and use your own domain.</p><div class="plans four-plans">
 <article class="featured"><span>Business Monthly</span><strong>$99<small>/month</small></strong><p>One professional website, custom domain, updates and independent branding.</p><button id="businessMonthlyBtn" type="button">Choose monthly</button></article>
@@ -57,7 +58,7 @@
 <article><span>Business Pro Monthly</span><strong>$199<small>/month</small></strong><p>Advanced presentation, bilingual support, more sites and priority capabilities.</p><button id="proMonthlyBtn" type="button">Choose Pro monthly</button></article>
 <article><span>Business Pro Annual</span><strong>$1,990<small>/year</small></strong><p>The Pro plan billed annually with annual savings.</p><button id="proYearlyBtn" type="button">Choose Pro annual</button></article>
 </div><button id="continuePreviewBtn" class="continue-preview" type="button">Continue with current preview</button><p id="publishMessage" class="message"></p></form></dialog>
-<dialog id="limitDialog"><form method="dialog" class="sheet limit-sheet"><header><div><small>Free trial complete</small><h2>Continue creating</h2></div><button value="cancel">×</button></header><p>Your two free website creations have been used. Subscribe to continue creating and updating websites.</p><div class="limit-actions four-limit-actions">
+<dialog id="limitDialog"><form method="dialog" class="sheet limit-sheet"><header><div><small>Free trial complete</small><h2>Continue creating</h2></div><button value="cancel">×</button></header><p>Your free website creation has been used. Subscribe to continue creating, redesigning, publishing, and connecting a custom domain.</p><div class="limit-actions four-limit-actions">
 <button id="limitBusinessMonthly" type="button">Business · $99/month</button>
 <button id="limitBusinessYearly" type="button">Business · $990/year</button>
 <button id="limitProMonthly" type="button">Pro · $199/month</button>
@@ -73,7 +74,7 @@
   <p id="authPrivacyText" class="auth-privacy">No password is required. A secure sign-in link will be sent to your email.</p>
   <p id="authMessage" class="message"></p>
 </div>
-<div id="accountPanel" hidden><p id="accountEmail" class="account-email"></p><div id="subscriptionSummary" class="subscription-summary"></div><div class="account-grid"><button id="mySitesBtn" type="button">My websites</button><button id="notificationsBtn" type="button">Notifications <span id="notificationCount"></span></button><button id="restoreSubscriptionBtn" type="button">Restore subscription</button><button id="manageSubscriptionBtn" type="button">Manage subscription</button><button id="exportAccountBtn" type="button">Export my data</button><button id="deleteAccountBtn" type="button" class="danger-action">Delete account</button><button id="enableNotificationsBtn" type="button">Enable device notifications</button><button id="logoutBtn" type="button">Sign out</button></div><div id="accountContent" class="account-content"></div></div>
+<div id="accountPanel" hidden><p id="accountEmail" class="account-email"></p><div class="account-grid"><button id="mySitesBtn" type="button">My websites</button><button id="notificationsBtn" type="button">Notifications <span id="notificationCount"></span></button><button id="manageSubscriptionBtn" type="button">Manage subscription</button><button id="enableNotificationsBtn" type="button">Enable device notifications</button><button id="logoutBtn" type="button">Sign out</button></div><div id="accountContent" class="account-content"></div></div>
 </form></dialog>
 <dialog id="installDialog"><form method="dialog" class="sheet install-sheet"><header><div><small>Install</small><h2>Add to Home Screen</h2></div><button value="cancel">×</button></header><p>On iPhone or iPad, tap Share, then choose “Add to Home Screen”.</p><button class="save" value="default">Done</button></form></dialog>
 

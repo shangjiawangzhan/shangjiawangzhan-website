@@ -14,7 +14,7 @@ window.SJW_API={
  trial:()=>request('/api/trial-status',{timeout:15000}),
  upload:file=>{const f=new FormData();f.append('file',file);return request('/api/uploads',{method:'POST',body:f,timeout:60000})},
  generate:data=>request('/api/generate-site',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),timeout:120000}),
- checkout:data=>request('/api/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),timeout:30000}),
+ checkout:data=>request('/api/create-checkout-session',{method:'POST',headers:{'Content-Type':'application/json','Idempotency-Key':(crypto.randomUUID?crypto.randomUUID():`${Date.now()}-${Math.random()}`)},body:JSON.stringify(data),timeout:45000}),
  portal:data=>request('/api/create-portal-session',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data),timeout:30000}),
  authConfig:()=>request('/api/auth/config',{timeout:15000}),
  me:()=>request('/api/me',{timeout:15000}),
